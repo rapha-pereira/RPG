@@ -1,5 +1,5 @@
 package rpg;
-
+// rapha
 public class Arma {
     private int ataqueDefesa;
     private double peso;
