@@ -48,6 +48,7 @@ public class RPG {
     }
 
     private static void criarPersonagem(ArrayList<Personagem> personagens, ArrayList<Arma> armas) {
+        //gfdag
         String nome = JOptionPane.showInputDialog("Digite o nome do personagem:");
         String descricao = JOptionPane.showInputDialog("Digite a descrição do personagem:");
         int idade = Integer.parseInt(JOptionPane.showInputDialog("Digite a idade do personagem:"));
