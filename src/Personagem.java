@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 public class Personagem {
     private String nome, descricao;
-    private int nivel, idade, forca, vitalidade, destreza, poder;
+    private int nivel, idade, forca, vitalidade, destreza, poder, xp;
     private Arma armaPrimaria, armaSecundaria;
     private ArrayList<Habilidade> habilidades;
     
@@ -75,6 +75,9 @@ public class Personagem {
     public int getPoder() {
         return this.poder;
     }
+    public int getXp() {
+        return this.xp;
+    }
     
     public Arma getArmaPrimaria() {
         return this.armaPrimaria;
@@ -110,6 +113,9 @@ public class Personagem {
     }
     public void setPoder(int poder) {
         this.poder = poder;
+    }
+    public void setXp(int xp) {
+        this.xp = xp;
     }
     
     public void setArmaPrimaria(Arma armaPrimaria) {
