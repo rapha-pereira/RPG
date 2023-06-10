@@ -1,6 +1,7 @@
 package rpg;
 
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.Scanner;
 
 import javax.swing.JOptionPane;
@@ -175,8 +176,47 @@ public class RPG {
     }
 
     private static void consultarLista(ArrayList<Personagem> personagens) {
+        //dá pra usar alguma coisa do 'batalhar'
     }
 
+    //verificar quais informações mostrar na escolha do personagem
     private static void batalhar(ArrayList<Personagem> personagens) {
+        boolean personagemSelecionadoValido = false;
+        Personagem personagemSelecionado = null;
+        do {
+            //Mensagem listando os personagens
+            String mensagemPersonagens = "Personagens disponíveis:\n";
+            for (int i = 0; i < personagens.size(); i++) {
+                Personagem personagem = personagens.get(i);
+                mensagemPersonagens += personagem.getNome() + " - Nível: " + personagem.getNivel() + ", XP: " + personagem.getXp() + "\n";
+            }
+            mensagemPersonagens += "0. Criar novo personagem\n";
+            
+            //JOptionPane com lista de personagens e escolha
+            String nomePersonagemSelecionado = JOptionPane.showInputDialog(mensagemPersonagens + "Escolha o nome do seu personagem:");
+    
+            //Validação do personagem escolhido
+            for (Personagem personagem : personagens) {
+            if (personagem.getNome().equalsIgnoreCase(nomePersonagemSelecionado)) {
+                personagemSelecionado = personagem;
+                personagemSelecionadoValido = true;
+                break;
+            }
+            }
+
+            if (!personagemSelecionadoValido) {
+                JOptionPane.showMessageDialog(null, "Personagem inválido. Digite um nome correspondente a um personagem disponível.");
+            }
+        } while (!personagemSelecionadoValido);
+        
+        JOptionPane.showMessageDialog(
+            null, "Batalha iniciada utilizando o personagem " + personagemSelecionado.getNome() + "!");
+
+        Random random = new Random();
+        int xp = random.nextInt(1000) + 1; //+1 para pular o 0
+        personagemSelecionado.setXp(xp);
+
+        JOptionPane.showMessageDialog(
+            null, "XP ganho na batalha: " + personagemSelecionado.getXp());
     }
 }

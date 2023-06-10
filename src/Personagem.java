@@ -7,10 +7,9 @@ import javax.swing.JOptionPane;
 
 public class Personagem {
     private String nome, descricao;
-    private int nivel, idade, forca, vitalidade, destreza, poder, pontosIniciais = 10;
+    private int nivel, idade, forca, vitalidade, destreza, poder, xp;
     private Arma armaPrimaria, armaSecundaria;
     private ArrayList<Habilidade> habilidades;
-    
     
     public Personagem(String nome, String descricao, int idade, Arma arma, int forca, int vitalidade, int destreza, int poder) {
         this.nome = nome;
@@ -75,6 +74,9 @@ public class Personagem {
     public int getPoder() {
         return this.poder;
     }
+    public int getXp() {
+        return this.xp;
+    }
     
     public Arma getArmaPrimaria() {
         return this.armaPrimaria;
@@ -110,6 +112,9 @@ public class Personagem {
     }
     public void setPoder(int poder) {
         this.poder = poder;
+    }
+    public void setXp(int xp) {
+        this.xp = xp;
     }
     
     public void setArmaPrimaria(Arma armaPrimaria) {
