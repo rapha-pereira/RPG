@@ -1,5 +1,4 @@
 package rpg;
-
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
@@ -10,17 +9,18 @@ public class RPG {
 
         int opcao;
         do {
-            opcao = Integer.parseInt(JOptionPane.showInputDialog(
+            opcao = Integer.parseInt(
+                JOptionPane.showInputDialog(
                     "======= MENU =======\n" +
-                            "1 - Criar personagem\n" +
-                            "2 - Adicionar habilidade a um personagem\n" +
-                            "3 - Visualizar informações de um personagem\n" +
-                            "4 - Consultar lista de personagens\n" +
-                            "5 - Batalhar\n" +
-                            "6 - Sair\n" +
-                            "Escolha uma opção:"
-            ));
-
+                        "1 - Criar personagem\n" +
+                        "2 - Adicionar habilidade a um personagem\n" +
+                        "3 - Visualizar informações de um personagem\n" +
+                        "4 - Consultar lista de personagens\n" +
+                        "5 - Batalhar\n" +
+                        "6 - Sair\n" +
+                        "Escolha uma opção:"
+                )
+            );
             switch (opcao) {
                 case 1:
                     criarPersonagem(personagens, armas);
@@ -92,6 +92,7 @@ public class RPG {
         
         String posicaoArma = "";
         boolean posicaoArmaValida = false;
+        
         while (!posicaoArmaValida) {
             posicaoArma = JOptionPane.showInputDialog("Digite a posição da arma (primária/secundária):");
             if (posicaoArma.equalsIgnoreCase("primária") || posicaoArma.equalsIgnoreCase("secundária")) {

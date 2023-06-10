@@ -23,16 +23,16 @@ public class Personagem {
     }
     
     public void definirArmaPersonagem(Arma arma) {
-        if(arma.getPosicaoArma().equalsIgnoreCase("primaria")){
+        if (arma.getPosicaoArma().equalsIgnoreCase("primaria")){
             this.armaPrimaria = arma;
-        }else {
+        }
+        else {
             this.armaSecundaria = arma;
         }
     }
     
     public void preencherAtributos() {
         Scanner scan = new Scanner (System.in);
-        
         this.forca = preencherUmAtributo("Força: ", scan);
         this.poder = preencherUmAtributo("Poder: ", scan);
         this.destreza = preencherUmAtributo("Destreza: ", scan);
@@ -45,7 +45,8 @@ public class Personagem {
             int valor = scan.nextInt();
             if(valor > 0 && valor <=10) {
                 return valor;
-            }else {
+            }
+            else {
                 System.out.println("O valor do atrubuto dever ser entre 1 e 10");
             }
         }
@@ -75,18 +76,15 @@ public class Personagem {
     public int getPoder() {
         return this.poder;
     }
-    
     public Arma getArmaPrimaria() {
         return this.armaPrimaria;
     }
     public Arma getArmaSecundaria() {
         return this.armaSecundaria;
     }
-    
     public ArrayList<Habilidade> getHabilidades() {
         return this.habilidades;
     }
-    
     public void setNome(String nome) {
         this.nome = nome;
     }
@@ -111,14 +109,12 @@ public class Personagem {
     public void setPoder(int poder) {
         this.poder = poder;
     }
-    
     public void setArmaPrimaria(Arma armaPrimaria) {
         this.armaPrimaria = armaPrimaria;
     }
     public void setArmaSecundaria(Arma armaSecundaria) {
         this.armaSecundaria = armaSecundaria;
     }
-    
     public void inserirHabilidade(Habilidade habilidade) {
         this.habilidades.add(habilidade);
     }
