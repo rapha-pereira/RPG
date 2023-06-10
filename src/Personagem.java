@@ -3,23 +3,25 @@ package rpg;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import javax.swing.JOptionPane;
+
 public class Personagem {
     private String nome, descricao;
-    private int nivel, idade, forca, vitalidade, destreza, poder;
+    private int nivel, idade, forca, vitalidade, destreza, poder, pontosIniciais = 10;
     private Arma armaPrimaria, armaSecundaria;
     private ArrayList<Habilidade> habilidades;
     
     
-    public Personagem(String nome, String descricao, int idade, Arma arma) {
-        this.poder = 1;
-        this.nivel = 1;
-        this.forca = 1;
+    public Personagem(String nome, String descricao, int idade, Arma arma, int forca, int vitalidade, int destreza, int poder) {
         this.nome = nome;
-        this.destreza = 1;
         this.idade = idade;
-        this.vitalidade = 1;
         this.descricao = descricao;
         definirArmaPersonagem(arma);
+        this.nivel = 1;
+        this.forca = forca;
+        this.vitalidade = vitalidade;
+        this.destreza = destreza;
+        this.poder = poder;
     }
     
     public void definirArmaPersonagem(Arma arma) {
@@ -31,22 +33,20 @@ public class Personagem {
     }
     
     public void preencherAtributos() {
-        Scanner scan = new Scanner (System.in);
-        
-        this.forca = preencherUmAtributo("Força: ", scan);
-        this.poder = preencherUmAtributo("Poder: ", scan);
-        this.destreza = preencherUmAtributo("Destreza: ", scan);
-        this.vitalidade = preencherUmAtributo("Vitalidade: ", scan);
+        this.forca = preencherUmAtributo("Força: ", pontosDisponiveis);
+        this.poder = preencherUmAtributo("Poder: ", pontosDisponiveis);
+        this.destreza = preencherUmAtributo("Destreza: ", pontosDisponiveis);
+        this.vitalidade = preencherUmAtributo("Vitalidade: ", pontosDisponiveis);
     }
     
-    private int preencherUmAtributo(String atributo, Scanner scan) {
+     public int preencherUmAtributo(String atributo, int pontosDisponiveis) {   
         while(true) {
-            System.out.println("Digite o valor para o atributo "+ atributo + ": ");
-            int valor = scan.nextInt();
-            if(valor > 0 && valor <=10) {
-                return valor;
-            }else {
-                System.out.println("O valor do atrubuto dever ser entre 1 e 10");
+            int valorAtributo = Integer.parseInt(JOptionPane.showInputDialog("Digite os pontos que deseja atribuir para " + atributo));
+            if (valorAtributo > 0 && valorAtributo <= pontosDisponiveis) {
+                return valorAtributo;
+            } else {
+                JOptionPane.showMessageDialog(
+            null, "O valor do atributo dever ser entre 1 e 10");
             }
         }
     }
