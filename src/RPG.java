@@ -2,6 +2,7 @@ package rpg;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Scanner;
 
 import javax.swing.JOptionPane;
 
@@ -50,10 +51,12 @@ public class RPG {
     }
 
     private static void criarPersonagem(ArrayList<Personagem> personagens, ArrayList<Arma> armas) {
+        //Preencher nome, descrição e idade do personagem
         String nome = JOptionPane.showInputDialog("Digite o nome do personagem:");
         String descricao = JOptionPane.showInputDialog("Digite a descrição do personagem:");
         int idade = Integer.parseInt(JOptionPane.showInputDialog("Digite a idade do personagem:"));
-    
+        
+        //Escolher, criar e definir a arma do personagem
         boolean armaSelecionadaValida = false;
         Arma armaSelecionada = null;
     
@@ -66,25 +69,52 @@ public class RPG {
             mensagemArmas += "0. Criar nova arma\n";
     
             int indiceArma = Integer.parseInt(JOptionPane.showInputDialog(mensagemArmas + "Digite o número correspondente à arma desejada:"));
-    
-            if (indiceArma == 0) {
+            
+            if (indiceArma == 0) { //opção criar arma
                 criarArma(armas);
-            } else if (indiceArma > 0 && indiceArma <= armas.size()) {
+            } else if (indiceArma > 0 && indiceArma <= armas.size()) { //escolhendo arma entre as opções
                 armaSelecionada = armas.get(indiceArma - 1);
-                if (armaSelecionada.getPosicaoArma().equalsIgnoreCase("primária")) {
+                if (armaSelecionada.getPosicaoArma().equalsIgnoreCase("primária")) { //validando se é primária
                     armaSelecionadaValida = true;
                 } else {
-                    JOptionPane.showMessageDialog(null, "A arma selecionada não é uma arma primária. Por favor, escolha uma arma primária.");
+                    JOptionPane.showMessageDialog(
+                        null, "A arma selecionada não é uma arma primária. Por favor, escolha uma arma primária.");
                 }
             } else {
-                JOptionPane.showMessageDialog(null, "Opção inválida. Digite um número correspondente à arma disponível.");
+                JOptionPane.showMessageDialog(
+                    null, "Opção inválida. Digite um número correspondente à arma disponível.");
             }
         } while (!armaSelecionadaValida);
-    
-        Personagem p = new Personagem(nome, descricao, idade, armaSelecionada);
+
+        //Preencher os atributos
+        int pontosDisponiveis, pontosIniciais = 10;
+        int forca, vitalidade, destreza, poder;
+        int atributos = 4;
+
+        JOptionPane.showMessageDialog(
+            null, "Você tem " + pontosIniciais + " pontos iniciais para distribuir entre seus atributos: Força, Vitalidade, Destreza e Poder.");
+        
+        forca = preencherAtributoInicial("Força", pontosIniciais, atributos);
+        pontosDisponiveis = pontosIniciais - forca;
+        atributos -= 1;
+                
+        vitalidade = preencherAtributoInicial("Vitalidade", pontosDisponiveis, atributos);
+        pontosDisponiveis -= vitalidade;
+        atributos -= 1;
+        
+        destreza = preencherAtributoInicial("Destreza", pontosDisponiveis, atributos);
+        pontosDisponiveis -= destreza;
+        atributos -= 1;
+                
+        poder = preencherAtributoInicial("Poder", pontosDisponiveis, atributos);
+        pontosDisponiveis -= poder;
+        atributos -= 1;
+        
+        Personagem p = new Personagem(nome, descricao, idade, armaSelecionada, forca, vitalidade, destreza, poder);
         personagens.add(p);
     
-        JOptionPane.showMessageDialog(null, "Personagem criado com sucesso!");
+        JOptionPane.showMessageDialog(
+            null, "Personagem criado com sucesso!");
     }
 
     private static void criarArma(ArrayList<Arma> armas) {
@@ -107,7 +137,37 @@ public class RPG {
         armas.add(a);
     
         JOptionPane.showMessageDialog(null, "Arma criada com sucesso!");
-    }  
+    }
+
+    private static int preencherAtributoInicial(String atributo, int pontosDisponiveis, int atributos) {
+        int pontosMin = 1;
+        int pontosMaxDisponiveis = pontosDisponiveis-atributos+1;
+        int atributosSeguintes = atributos-1;
+        while (true) {
+            int valorAtributo = Integer.parseInt(JOptionPane.showInputDialog(
+                "Pontuação mínima por atributo: " + pontosMin + "\n" +
+                "Atributos a seguir: " + atributosSeguintes + "\n" +
+                "Pontos disponíveis: " + pontosDisponiveis + "\n" +
+                "Pontuação disponível para este atributo: " + pontosMaxDisponiveis + "\n" +
+                "Digite os pontos que deseja atribuir para " + atributo));
+            if (valorAtributo > 0 && valorAtributo <= pontosMaxDisponiveis) {
+                /*if (atributo.equalsIgnoreCase("poder") || pontosDisponiveis >= atributos-1) {*/
+                    return valorAtributo;
+                /*} else {
+                    JOptionPane.showMessageDialog(
+                        null, "Existem atributos que precisarão de pelo menos 1 ponto. Revise a atribuição de pontos!");
+                }*/
+            } else {
+                if (valorAtributo <= 0) {
+                    JOptionPane.showMessageDialog(
+                        null, "O valor do atributo deve ser no mínimo " + pontosMin);
+                } else {
+                    JOptionPane.showMessageDialog(
+                        null, "O valor do atributo deve ser entre 1 e " + pontosMaxDisponiveis + ", pois existem " + atributosSeguintes + " atributos que precisarão de pelo menos 1 ponto cada.");
+                }
+            }
+        }
+    }
 
     private static void adicionarHabilidade(ArrayList<Personagem> personagens) {
     }
