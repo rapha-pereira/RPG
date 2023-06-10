@@ -47,6 +47,16 @@ public class RPG {
         } while (opcao != 6);
     }
 
+    private static String createMensagemArmas(ArrayList<Arma> armas) {
+        String mensagemArmas = "Armas disponíveis:\n0. Criar nova arma\n";
+
+        for (int i = 0; i < armas.size(); i++) {
+            Arma arma = armas.get(i);
+            mensagemArmas += (i + 1) + ". " + arma.getTipo() + " - Ataque/Defesa: " + arma.getAtaqueDefesa() + " | Peso: " + arma.getPeso() + " | Posição: " + arma.getPosicaoArma() + "\n";
+        }
+        return mensagemArmas;
+    }
+
     private static void criarPersonagem(ArrayList<Personagem> personagens, ArrayList<Arma> armas) {
         String nome = JOptionPane.showInputDialog("Digite o nome do personagem:");
         String descricao = JOptionPane.showInputDialog("Digite a descrição do personagem:");
@@ -56,18 +66,14 @@ public class RPG {
         Arma armaSelecionada = null;
     
         do {
-            String mensagemArmas = "Armas disponíveis:\n";
-            for (int i = 0; i < armas.size(); i++) {
-                Arma arma = armas.get(i);
-                mensagemArmas += (i + 1) + ". " + arma.getTipo() + " - Ataque/Defesa: " + arma.getAtaqueDefesa() + ", Peso: " + arma.getPeso() + ", Posição: " + arma.getPosicaoArma() + "\n";
-            }
-            mensagemArmas += "0. Criar nova arma\n";
-    
+            String mensagemArmas = createMensagemArmas(armas);
+
             int indiceArma = Integer.parseInt(JOptionPane.showInputDialog(mensagemArmas + "Digite o número correspondente à arma desejada:"));
     
             if (indiceArma == 0) {
                 criarArma(armas);
-            } else if (indiceArma > 0 && indiceArma <= armas.size()) {
+            }
+            else if (indiceArma > 0 && indiceArma <= armas.size()) {
                 armaSelecionada = armas.get(indiceArma - 1);
                 if (armaSelecionada.getPosicaoArma().equalsIgnoreCase("primária")) {
                     armaSelecionadaValida = true;
@@ -92,7 +98,7 @@ public class RPG {
         
         String posicaoArma = "";
         boolean posicaoArmaValida = false;
-        
+
         while (!posicaoArmaValida) {
             posicaoArma = JOptionPane.showInputDialog("Digite a posição da arma (primária/secundária):");
             if (posicaoArma.equalsIgnoreCase("primária") || posicaoArma.equalsIgnoreCase("secundária")) {
