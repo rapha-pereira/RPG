@@ -110,7 +110,7 @@ public class RPG {
         pontosDisponiveis -= poder;
         atributos -= 1;
         
-        Personagem p = new Personagem(nome, descricao, idade, armaSelecionada, forca, vitalidade, destreza, poder);
+        Personagem p = new Personagem(nome, descricao, idade, armaSelecionada, forca, vitalidade, destreza, poder, pontosDisponiveis);
         personagens.add(p);
     
         JOptionPane.showMessageDialog(
@@ -161,9 +161,12 @@ public class RPG {
                 if (valorAtributo <= 0) {
                     JOptionPane.showMessageDialog(
                         null, "O valor do atributo deve ser no mínimo " + pontosMin);
+                } else if ((atributosSeguintes == 2 && pontosDisponiveis <= 3) || (atributosSeguintes == 1 && pontosDisponiveis <= 2)) {
+                    JOptionPane.showMessageDialog(
+                        null, "O valor do atributo deve ser " + pontosMin + ", pois existem mais atributos que precisarão de pelo menos 1 ponto cada.");
                 } else {
                     JOptionPane.showMessageDialog(
-                        null, "O valor do atributo deve ser entre 1 e " + pontosMaxDisponiveis + ", pois existem " + atributosSeguintes + " atributos que precisarão de pelo menos 1 ponto cada.");
+                        null, "O valor do atributo deve ser entre 1 e " + pontosMaxDisponiveis + ", pois existem mais atributos que precisarão de pelo menos 1 ponto cada.");
                 }
             }
         }
@@ -188,7 +191,9 @@ public class RPG {
             String mensagemPersonagens = "Personagens disponíveis:\n";
             for (int i = 0; i < personagens.size(); i++) {
                 Personagem personagem = personagens.get(i);
-                mensagemPersonagens += personagem.getNome() + " - Nível: " + personagem.getNivel() + ", XP: " + personagem.getXp() + "\n";
+                int xpParaProximoNivel = 1000 * personagem.getNivel();
+                mensagemPersonagens += personagem.getNome() + " - Nível: " + personagem.getNivel() + " - Status XP: " + personagem.getXpExcedente() + "/" + xpParaProximoNivel + " - Pontos de Atributo Disponíveis:" + personagem.getPontosDisponiveis() + "\n";
+                xpParaProximoNivel = 0;
             }
             mensagemPersonagens += "0. Criar novo personagem\n";
             
@@ -213,10 +218,22 @@ public class RPG {
             null, "Batalha iniciada utilizando o personagem " + personagemSelecionado.getNome() + "!");
 
         Random random = new Random();
-        int xp = random.nextInt(1000) + 1; //+1 para pular o 0
-        personagemSelecionado.setXp(xp);
-
+        int xpGanho = random.nextInt(1000) + 1; // +1 para pular o 0
+        personagemSelecionado.setXp(personagemSelecionado.getXp() + xpGanho);
+        personagemSelecionado.setXpExcedente(personagemSelecionado.getXpExcedente() + xpGanho);
         JOptionPane.showMessageDialog(
-            null, "XP ganho na batalha: " + personagemSelecionado.getXp());
+            null, "XP ganho na batalha: " + xpGanho);
+
+        // Verificar se o personagem subiu de nível
+        int xpParaProximoNivel = 1000 * personagemSelecionado.getNivel();                                                   // Define XP necessário para o próximo nível
+        if (personagemSelecionado.getXpExcedente() >= xpParaProximoNivel) {                                                 // Verifica o personagem passou de nível
+            personagemSelecionado.setNivel(personagemSelecionado.getNivel() + 1);                                           // Sobe o nível do personagem 
+            int xpExcedente = personagemSelecionado.getXpExcedente() - xpParaProximoNivel;                                  // Calcula o saldo de XP após subir de nível     
+            personagemSelecionado.setXpExcedente(xpExcedente);                                                              // Atualiza a evolução do XP no nível atual
+            int pontosGanhos = 1;
+            personagemSelecionado.setPontosDisponiveis(personagemSelecionado.getPontosDisponiveis() + pontosGanhos);        // Acrescenta ponto ganho aos pontos disponíveis para atirbutos
+            JOptionPane.showMessageDialog(
+                null, "Parabéns! O personagem " + personagemSelecionado.getNome() + " subiu para o nível " + personagemSelecionado.getNivel() + " e ganhou " + pontosGanhos + " ponto de atributo.");
+        }
     }
 }
