@@ -1,5 +1,3 @@
-package rpg;
-
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -23,7 +21,7 @@ public class Personagem {
     }
     
     public void definirArmaPersonagem(Arma arma) {
-        if(arma.getPosicaoArma().equalsIgnoreCase("primaria")){
+        if (arma.getPosicaoArma().equalsIgnoreCase("primária")){
             this.armaPrimaria = arma;
         }else {
             this.armaSecundaria = arma;

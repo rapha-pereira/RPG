@@ -1,18 +1,16 @@
-package rpg;
-
 public class Arma {
     private int ataqueDefesa;
     private double peso;
     private String tipo;
     private String posicaoArma;
-    
+
     public Arma(int ataqueDefesa, double peso, String tipo, String posicaoArma) {
         this.ataqueDefesa = ataqueDefesa;
         this.peso = peso;
         this.posicaoArma = posicaoArma;
         this.tipo = tipo;
     }
-    
+
     public int getAtaqueDefesa() {
         return this.ataqueDefesa;
     }

@@ -1,4 +1,3 @@
-package rpg;
 
 public class Habilidade {
     private String nome, descricao, tipoAtributo;
