@@ -11,7 +11,8 @@ public class RPG_alt {
     static Integer createNextChampionIter = 1;
     static Integer menuInput;
     static List<Personagem> championsList = new ArrayList<>();
-    static List<Arma> weaponsList = new ArrayList<>();
+    static List<Arma> primaryWeaponsList = new ArrayList<>();
+    static List<Arma> secondaryWeaponsList = new ArrayList<>();
     
     
     public static Integer mainMenu(){
@@ -19,11 +20,12 @@ public class RPG_alt {
             JOptionPane.showInputDialog(
                 "======= MENU =======\n" +
                     "1 - Criar personagem\n" +
-                    "2 - Adicionar habilidade a um personagem\n" +
-                    "3 - Visualizar informações de um personagem\n" +
-                    "4 - Consultar lista de personagens\n" +
-                    "5 - Batalhar\n" +
-                    "6 - Sair\n" +
+                    "2 - Adicionar uma arma secundária a um personagem\n" +
+                    //"3 - Adicionar habilidade a um personagem\n" +
+                    //"4 - Visualizar informações de um personagem\n" +
+                    "5 - Consultar lista de personagens\n" +
+                    //"6 - Batalhar\n" +
+                    "7 - Sair\n" +
                     "Escolha uma opção:"
             )
         );
@@ -45,13 +47,18 @@ public class RPG_alt {
                     menuInput = mainMenu();
                     break;
                 case 2:
-                    adicionarHabilidade();
+                    addSecondaryWeapon();
                     menuInput = mainMenu();
                     break;
-                // case 3:
-                //     visualizarInformacoes(personagens);
-                //     break;
-                case 4:
+                //case 2:
+                //    adicionarHabilidade();
+                //    menuInput = mainMenu();
+                //    break;
+                //case 3:
+                //    showChampionsInfo();
+                //    menuInput = mainMenu();
+                //    break;
+                case 5:
                     showChampionsList();
                     menuInput = mainMenu();
                     break;
@@ -74,57 +81,88 @@ public class RPG_alt {
         Arma machado = new Arma(25, 15, "Machado", "primária");
         Arma espada = new Arma(15, 5, "Espada", "primária");
         Arma escopeta = new Arma(30, 20, "Escopeta", "primária");
-        weaponsList.add(machado);
-        weaponsList.add(espada);
-        weaponsList.add(escopeta);
+        primaryWeaponsList.add(machado);
+        primaryWeaponsList.add(espada);
+        primaryWeaponsList.add(escopeta);
     }
 
-    public static void createUserInputedWeapon() {
+    public static void createUserInputedWeapon(String weaponType) {
         Integer attackDefense = Integer.parseInt(JOptionPane.showInputDialog("Qual será valor de ataque e defesa de sua arma?"));
         Integer weigth = Integer.parseInt(JOptionPane.showInputDialog("Qual será o peso da sua arma?"));
         String name = JOptionPane.showInputDialog("Qual será o nome da sua arma?");
-        String position = JOptionPane.showInputDialog("Sua arma será primária ou secundária?\n(Favor digitar primária ou secundária com acentos)");
-
-        Arma userWeapon = new Arma(attackDefense, weigth, name, position);
-        weaponsList.add(userWeapon);
+        if (weaponType == "primária"){
+            Arma userWeapon = new Arma(attackDefense, weigth, name, "primária");
+            primaryWeaponsList.add(userWeapon);
+        }
+        else{
+            Arma userWeapon = new Arma(attackDefense, weigth, name, "secundária");
+            secondaryWeaponsList.add(userWeapon);
+        }
     }
 
-    public static String createWeaponsMenu(){
+    public static String createPrimaryWeaponsMenu(){
         String mensagemArmas = "Armas disponíveis:\n0. Criar nova arma\n";
-        for (int i = 0; i < weaponsList.size(); i++) {
-            Arma arma = weaponsList.get(i);
+        for (int i = 0; i < primaryWeaponsList.size(); i++) {
+            Arma arma = primaryWeaponsList.get(i);
             mensagemArmas += (i + 1) + ". " + arma.getTipo() + " - Ataque/Defesa: " + arma.getAtaqueDefesa() + " | Peso: " + arma.getPeso() + " | Posição: " + arma.getPosicaoArma() + "\n";
         }
 
         return mensagemArmas;
     }
 
-    public static Boolean weaponsMenuCheck(Integer userInput){
-        try {
-            weaponsList.get(userInput);
-            return true;
+    public static String createSecondaryWeaponsMenu(){
+        String mensagemArmas = "Armas secundárias disponíveis:\n0. Criar nova arma\n";
+        for (int i = 0; i < secondaryWeaponsList.size(); i++) {
+            Arma arma = secondaryWeaponsList.get(i);
+            mensagemArmas += (i + 1) + ". " + arma.getTipo() + " - Ataque/Defesa: " + arma.getAtaqueDefesa() + " | Peso: " + arma.getPeso() + " | Posição: " + arma.getPosicaoArma() + "\n";
         }
-        catch (IndexOutOfBoundsException nexc) {
-            return false;
-        }
+
+        return mensagemArmas;
     }
+
 
     // Menu functions
     public static void createChampion(){
         String name = JOptionPane.showInputDialog("Digite o nome do personagem:");
         String description = JOptionPane.showInputDialog("Digite a descrição do personagem:");
         Integer age = Integer.parseInt(JOptionPane.showInputDialog("Digite a idade do personagem:"));
+
         Integer weaponMenuUserOption = 1;
+        weaponMenuUserOption = Integer.parseInt(JOptionPane.showInputDialog(createPrimaryWeaponsMenu() + "Digite o número correspondente à arma desejada:"));
 
-        weaponMenuUserOption = Integer.parseInt(JOptionPane.showInputDialog(createWeaponsMenu() + "Digite o número correspondente à arma desejada:"));
-        while(weaponMenuUserOption == 0){
-            createUserInputedWeapon();
-            weaponMenuUserOption = Integer.parseInt(JOptionPane.showInputDialog(createWeaponsMenu() + "Digite o número correspondente à arma desejada:"));
+        while(weaponMenuUserOption == 0 ){
+            createUserInputedWeapon("primária");
+            weaponMenuUserOption = Integer.parseInt(JOptionPane.showInputDialog(createPrimaryWeaponsMenu() + "Digite o número correspondente à arma desejada:"));
         }
-
-        Personagem championObj = new Personagem(name, description, age, weaponsList.get(weaponMenuUserOption - 1));
+    
+        Personagem championObj = new Personagem(name, description, age, primaryWeaponsList.get(weaponMenuUserOption - 1));
         championsList.add(championObj);
         JOptionPane.showMessageDialog(null, "Personagem criado com sucesso.");
+    }
+
+    public static void addSecondaryWeapon(){
+        Integer weaponMenuUserOption = 1;
+        String returnMessage = "======= Selecione o personagem que irá ter a arma secundária =======\n0. Retornar para o menu";
+
+        for (int i = 0; i < championsList.size(); i++) {
+            Personagem champion = championsList.get(i);
+            returnMessage += "\nPersonagem " + (i + 1) + ": \n";
+            returnMessage += "  Nome: " + champion.getNome();
+        }
+
+        Integer userInput = Integer.parseInt(JOptionPane.showInputDialog(null, returnMessage));
+        if (userInput != 0){
+            weaponMenuUserOption = Integer.parseInt(JOptionPane.showInputDialog(createSecondaryWeaponsMenu() + "Digite o número correspondente à arma desejada:"));
+            while(weaponMenuUserOption == 0 ){
+                createUserInputedWeapon("secundária");
+                weaponMenuUserOption = Integer.parseInt(JOptionPane.showInputDialog(createSecondaryWeaponsMenu() + "Digite o número correspondente à arma desejada:"));
+            }
+
+            Personagem champion = championsList.get(userInput - 1);
+            champion.definirArmaPersonagem(secondaryWeaponsList.get(weaponMenuUserOption - 1));
+
+            JOptionPane.showMessageDialog(null, "Arma secundária atribuida com sucesso ao personagem " + champion.getNome());
+        }
     }
 
     public static void showChampionsList(){
@@ -145,6 +183,7 @@ public class RPG_alt {
         }
         JOptionPane.showMessageDialog(null, returnMessage);
     }
+
 }
 
         // Integer userWelcomeChoice = scan.nextInt();
