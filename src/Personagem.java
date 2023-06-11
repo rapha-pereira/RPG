@@ -7,20 +7,23 @@ import javax.swing.JOptionPane;
 
 public class Personagem {
     private String nome, descricao;
-    private int nivel, idade, forca, vitalidade, destreza, poder, xp;
+    private int nivel, idade, forca, vitalidade, destreza, poder, pontosDisponiveis, xp, xpExcedente;
     private Arma armaPrimaria, armaSecundaria;
     private ArrayList<Habilidade> habilidades;
     
-    public Personagem(String nome, String descricao, int idade, Arma arma, int forca, int vitalidade, int destreza, int poder) {
+    public Personagem(String nome, String descricao, int idade, Arma arma, int forca, int vitalidade, int destreza, int poder, int pontosDisponiveis) {
         this.nome = nome;
         this.idade = idade;
         this.descricao = descricao;
         definirArmaPersonagem(arma);
-        this.nivel = 1;
         this.forca = forca;
         this.vitalidade = vitalidade;
         this.destreza = destreza;
         this.poder = poder;
+        this.nivel = 1;
+        this.xp = 0;
+        this.xpExcedente = 0;
+        this.pontosDisponiveis = pontosDisponiveis;
     }
     
     public void definirArmaPersonagem(Arma arma) {
@@ -74,8 +77,14 @@ public class Personagem {
     public int getPoder() {
         return this.poder;
     }
+    public int getPontosDisponiveis() {
+        return pontosDisponiveis;
+    }
     public int getXp() {
         return this.xp;
+    }
+    public int getXpExcedente() {
+        return xpExcedente;
     }
     
     public Arma getArmaPrimaria() {
@@ -113,8 +122,14 @@ public class Personagem {
     public void setPoder(int poder) {
         this.poder = poder;
     }
+    public void setPontosDisponiveis(int pontosDisponiveis) {
+        this.pontosDisponiveis = pontosDisponiveis;
+    }
     public void setXp(int xp) {
         this.xp = xp;
+    }
+    public void setXpExcedente(int xpExcedente) {
+        this.xpExcedente = xpExcedente;
     }
     
     public void setArmaPrimaria(Arma armaPrimaria) {
