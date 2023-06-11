@@ -140,6 +140,7 @@ public class Personagem {
     }
     
     public void inserirHabilidade(Habilidade habilidade) {
+        this.habilidades = new ArrayList<>();
         this.habilidades.add(habilidade);
     }
     

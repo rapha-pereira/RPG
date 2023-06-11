@@ -29,7 +29,7 @@ public class RPG {
                     criarPersonagem(personagens, armas);
                     break;
                 case 2:
-                    adicionarHabilidade(personagens);
+                    inserirHabilidade(personagens, armas);
                     break;
                 case 3:
                     visualizarInformacoes(personagens);
@@ -38,7 +38,7 @@ public class RPG {
                     consultarLista(personagens);
                     break;
                 case 5:
-                    batalhar(personagens);
+                    batalhar(personagens, armas);
                     break;
                 case 6:
                     JOptionPane.showMessageDialog(null, "Obrigado por jogar! Até mais!");
@@ -172,7 +172,91 @@ public class RPG {
         }
     }
 
-    private static void adicionarHabilidade(ArrayList<Personagem> personagens) {
+    private static void inserirHabilidade(ArrayList<Personagem> personagens,ArrayList<Arma> armas) {
+        Habilidade detectarArmadilhas = new Habilidade("Detectar Armadilhas", "Permite ao personagem detectar armadilhas ocultas em seu ambiente.", "Poder", 3);
+        Habilidade furtividade = new Habilidade("Furtividade", "Permite ao personagem se mover silenciosamente e passar despercebido pelos inimigos.", "Destreza", 2);
+        Habilidade ataqueDuplo = new Habilidade("Ataque Duplo", "Permite ao personagem realizar dois ataques consecutivos em um único turno de combate.", "Força", 4);
+        Habilidade curaRapida = new Habilidade("Cura Rápida", "Permite ao personagem recuperar pontos de vida de forma mais eficiente durante a cura.", "Vitalidade", 3);
+        Habilidade magiaElemental = new Habilidade("Magia Elemental", "Permite ao personagem lançar magias de elementos como fogo, água, ar ou terra.", "Poder", 5);
+        
+        boolean personagemSelecionadoValido = false;
+        Personagem personagemSelecionado = null;
+        boolean habilidadeValida = false;
+        Habilidade habilidadeSelecionada = null;
+
+        do {
+            //Montando mensagem listando os personagens
+            String mensagemPersonagens = "Personagens disponíveis:\n";
+            for (int i = 0; i < personagens.size(); i++) {
+                Personagem personagem = personagens.get(i);
+                mensagemPersonagens += personagem.getNome() + " - Nível: " + personagem.getNivel() + " - Poder: " + personagem.getPoder() + "\n";
+            }
+            mensagemPersonagens += "0. Criar novo personagem\n";
+            
+            //Exibindo lista de personagens para escolha
+            String nomePersonagemSelecionado = JOptionPane.showInputDialog(mensagemPersonagens + "Escolha o nome do seu personagem:");
+    
+            //Validação do personagem escolhido
+            if (nomePersonagemSelecionado.equals("0")) { // Opção criar personagem
+            criarPersonagem(personagens, armas);
+            } else {
+                for (Personagem personagem : personagens) {
+                    if (personagem.getNome().equalsIgnoreCase(nomePersonagemSelecionado)) {
+                        personagemSelecionado = personagem;
+                        personagemSelecionadoValido = true;
+                        break;
+                    }
+                }
+            }
+
+            if (!personagemSelecionadoValido && !nomePersonagemSelecionado.equals("0")) {
+                JOptionPane.showMessageDialog(null, "Personagem inválido. Digite um nome correspondente a um personagem disponível.");
+            }
+        } while (!personagemSelecionadoValido);
+
+        do {
+            String mensagemHabilidades = personagemSelecionado.getNome() + " - Poder: " + personagemSelecionado.getPoder() + "\n";
+            mensagemHabilidades += "Habilidades disponíveis:\n";
+            mensagemHabilidades += "1. " + detectarArmadilhas.getNome() + " - Poder mínimo: " + detectarArmadilhas.getPoderMinimo() + " - " + detectarArmadilhas.getDescricao() + "\n";
+            mensagemHabilidades += "2. " + furtividade.getNome() + " - Poder mínimo: " + furtividade.getPoderMinimo() + " - " + furtividade.getDescricao() + "\n";
+            mensagemHabilidades += "3. " + ataqueDuplo.getNome() + " - Poder mínimo: " + ataqueDuplo.getPoderMinimo() + " - " + ataqueDuplo.getDescricao() + "\n";
+            mensagemHabilidades += "4. " + curaRapida.getNome() + " - Poder mínimo: " + curaRapida.getPoderMinimo() + " - " + curaRapida.getDescricao() + "\n";
+            mensagemHabilidades += "5. " + magiaElemental.getNome() + " - Poder mínimo: " + magiaElemental.getPoderMinimo() + " - " + magiaElemental.getDescricao() + "\n";
+        
+        
+            // Exibe lista e solicita ao usuário que escolha uma habilidade
+            int habilidadeEscolhida = Integer.parseInt(JOptionPane.showInputDialog(mensagemHabilidades + "Escolha uma habilidade:"));
+            
+            switch (habilidadeEscolhida) {
+                case 1:
+                    habilidadeSelecionada = detectarArmadilhas;
+                    break;
+                case 2:
+                    habilidadeSelecionada = furtividade;
+                    break;
+                case 3:
+                    habilidadeSelecionada = ataqueDuplo;
+                    break;
+                case 4:
+                    habilidadeSelecionada = curaRapida;
+                    break;
+                case 5:
+                    habilidadeSelecionada = magiaElemental;
+                    break;
+            }
+
+            if (habilidadeSelecionada != null) {
+                if (personagemSelecionado.getPoder() >= habilidadeSelecionada.getPoderMinimo()) {
+                    personagemSelecionado.inserirHabilidade(habilidadeSelecionada);
+                    habilidadeValida = true;
+                    JOptionPane.showMessageDialog(
+                        null, "Habilidade adicionada com sucesso!");
+                } else {
+                    JOptionPane.showMessageDialog(
+                        null, "O personagem não tem poder suficiente para escolher essa habilidade.");
+                }
+            }
+        }while (!habilidadeValida);
     }
 
     private static void visualizarInformacoes(ArrayList<Personagem> personagens) {
@@ -183,11 +267,11 @@ public class RPG {
     }
 
     //verificar quais informações mostrar na escolha do personagem
-    private static void batalhar(ArrayList<Personagem> personagens) {
+    private static void batalhar(ArrayList<Personagem> personagens,ArrayList<Arma> armas) {
         boolean personagemSelecionadoValido = false;
         Personagem personagemSelecionado = null;
         do {
-            //Mensagem listando os personagens
+            //Montando mensagem listando os personagens
             String mensagemPersonagens = "Personagens disponíveis:\n";
             for (int i = 0; i < personagens.size(); i++) {
                 Personagem personagem = personagens.get(i);
@@ -197,19 +281,23 @@ public class RPG {
             }
             mensagemPersonagens += "0. Criar novo personagem\n";
             
-            //JOptionPane com lista de personagens e escolha
+            //Exibindo lista de personagens para escolha
             String nomePersonagemSelecionado = JOptionPane.showInputDialog(mensagemPersonagens + "Escolha o nome do seu personagem:");
     
             //Validação do personagem escolhido
-            for (Personagem personagem : personagens) {
-            if (personagem.getNome().equalsIgnoreCase(nomePersonagemSelecionado)) {
-                personagemSelecionado = personagem;
-                personagemSelecionadoValido = true;
-                break;
-            }
+            if (nomePersonagemSelecionado.equals("0")) { // Opção criar personagem
+            criarPersonagem(personagens, armas);
+            } else {
+                for (Personagem personagem : personagens) {
+                    if (personagem.getNome().equalsIgnoreCase(nomePersonagemSelecionado)) {
+                        personagemSelecionado = personagem;
+                        personagemSelecionadoValido = true;
+                        break;
+                    }
+                }
             }
 
-            if (!personagemSelecionadoValido) {
+            if (!personagemSelecionadoValido && !nomePersonagemSelecionado.equals("0")) {
                 JOptionPane.showMessageDialog(null, "Personagem inválido. Digite um nome correspondente a um personagem disponível.");
             }
         } while (!personagemSelecionadoValido);
