@@ -1,52 +1,86 @@
 import java.util.ArrayList;
-import java.util.Scanner;
+import javax.swing.JOptionPane;
 
 public class Personagem {
     private String nome, descricao;
-    private int nivel, idade, forca, vitalidade, destreza, poder;
+    private Integer nivel, idade, forca, vitalidade, destreza, poder, pontosDisponiveis, xp, xpExcedente;
     private Arma armaPrimaria, armaSecundaria;
-    private ArrayList<Habilidade> habilidades;
+    private ArrayList<Habilidade> habilidades = new ArrayList<>();
     
     
-    public Personagem(String nome, String descricao, int idade, Arma arma) {
-        this.poder = 1;
-        this.nivel = 1;
-        this.forca = 1;
+    public Personagem(
+        String nome, 
+        String descricao, 
+        Integer idade,
+        Integer destreza,
+        Integer vitalidade,
+        Integer poder,
+        Integer forca,
+        Integer pontosDisponiveis,
+        Arma arma
+    ) {
         this.nome = nome;
-        this.destreza = 1;
-        this.idade = idade;
-        this.vitalidade = 1;
         this.descricao = descricao;
+        this.idade = idade;
+        this.destreza = destreza;
+        this.vitalidade = vitalidade;
+        this.forca = forca;
+        this.vitalidade = vitalidade;
+        this.destreza = destreza;
+        this.poder = poder;
+        this.nivel = 1;
+        this.xp = 0;
+        this.xpExcedente = 0;
+        this.pontosDisponiveis = pontosDisponiveis;
         definirArmaPersonagem(arma);
+    }
+    
+    public void preencherAtributos() {
+        this.forca = preencherUmAtributo("Força: ", pontosDisponiveis);
+        this.poder = preencherUmAtributo("Poder: ", pontosDisponiveis);
+        this.destreza = preencherUmAtributo("Destreza: ", pontosDisponiveis);
+        this.vitalidade = preencherUmAtributo("Vitalidade: ", pontosDisponiveis);
+    }
+    
+     public int preencherUmAtributo(String atributo, Integer pontosDisponiveis) {   
+        while(true) {
+            Integer valorAtributo = Integer.parseInt(JOptionPane.showInputDialog("Digite os pontos que deseja atribuir para " + atributo));
+            if (valorAtributo > 0 && valorAtributo <= pontosDisponiveis) {
+                return valorAtributo;
+            } else {
+                JOptionPane.showMessageDialog(
+            null, "O valor do atributo dever ser entre 1 e 10");
+            }
+        }
     }
     
     public void definirArmaPersonagem(Arma arma) {
         if (arma.getPosicaoArma().equalsIgnoreCase("primária")){
             this.armaPrimaria = arma;
-        }else {
+        }
+        else {
             this.armaSecundaria = arma;
         }
     }
-    
-    public void preencherAtributos() {
-        Scanner scan = new Scanner (System.in);
-        
-        this.forca = preencherUmAtributo("Força: ", scan);
-        this.poder = preencherUmAtributo("Poder: ", scan);
-        this.destreza = preencherUmAtributo("Destreza: ", scan);
-        this.vitalidade = preencherUmAtributo("Vitalidade: ", scan);
+
+    public Integer getXpExcedente(){
+        return this.xpExcedente;
     }
-    
-    private int preencherUmAtributo(String atributo, Scanner scan) {
-        while(true) {
-            System.out.println("Digite o valor para o atributo "+ atributo + ": ");
-            int valor = scan.nextInt();
-            if(valor > 0 && valor <=10) {
-                return valor;
-            }else {
-                System.out.println("O valor do atrubuto dever ser entre 1 e 10");
-            }
-        }
+    public Integer getXp(){
+        return this.xp;
+    }
+    public Integer getPontosDisponiveis(){
+        return this.pontosDisponiveis;
+    }
+
+    public void setXpExcedente(Integer xpExcedente){
+        this.xpExcedente = xpExcedente;
+    }
+    public void setXp(Integer xp){
+        this.xp = xp;
+    }
+    public void setPontosDisponiveis(Integer pontosDisponiveis){
+        this.pontosDisponiveis = pontosDisponiveis;
     }
 
     public String getNome() {
@@ -55,22 +89,22 @@ public class Personagem {
     public String getDescricao() {
         return this.descricao;
     }
-    public int getNivel() {
+    public Integer getNivel() {
         return this.nivel;
     }
-    public int getIdade() {
+    public Integer getIdade() {
         return this.idade;
     }
-    public int getForca() {
+    public Integer getForca() {
         return this.forca;
     }
-    public int getVitadidade() {
+    public Integer getVitadidade() {
         return this.vitalidade;
     }
-    public int getDestreza() {
+    public Integer getDestreza() {
         return this.destreza;
     }
-    public int getPoder() {
+    public Integer getPoder() {
         return this.poder;
     }
     
@@ -120,5 +154,4 @@ public class Personagem {
     public void inserirHabilidade(Habilidade habilidade) {
         this.habilidades.add(habilidade);
     }
-    
 }

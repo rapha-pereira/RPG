@@ -1,19 +1,19 @@
 import java.util.ArrayList;
-
-import javax.print.attribute.standard.JobHoldUntil;
-import javax.swing.JOptionPane;
 import java.util.Arrays;
+
+import javax.swing.JOptionPane;
 import java.util.List;
-import java.util.Scanner;
+import java.util.Random;
 
 public class RPG_alt {
     static boolean createNextChampionBool = true;
     static Integer createNextChampionIter = 1;
     static Integer menuInput;
+
     static List<Personagem> championsList = new ArrayList<>();
     static List<Arma> primaryWeaponsList = new ArrayList<>();
     static List<Arma> secondaryWeaponsList = new ArrayList<>();
-    
+    static List<Habilidade> skillsList = new ArrayList<>();
     
     public static Integer mainMenu(){
         return Integer.parseInt(
@@ -21,11 +21,12 @@ public class RPG_alt {
                 "======= MENU =======\n" +
                     "1 - Criar personagem\n" +
                     "2 - Adicionar uma arma secundária a um personagem\n" +
-                    //"3 - Adicionar habilidade a um personagem\n" +
-                    //"4 - Visualizar informações de um personagem\n" +
+                    "3 - Adicionar habilidade a um personagem\n" +
+                    "4 - Visualizar informações de um personagem\n" +
                     "5 - Consultar lista de personagens\n" +
-                    //"6 - Batalhar\n" +
-                    "7 - Sair\n" +
+                    "6 - Batalhar\n" +
+                    "7 - Adicionar pontos a um atributo\n" +
+                    "8 - Sair\n" +
                     "Escolha uma opção:"
             )
         );
@@ -38,9 +39,10 @@ public class RPG_alt {
         
         // Running helpers
         createWeaponsPreDefinedKit();
-
+        createSkillsPreDefinedKit();
         menuInput = mainMenu();
-        while (menuInput != 6){
+
+        while (menuInput != 8){
             switch (menuInput) {
                 case 1:
                     createChampion();
@@ -50,28 +52,26 @@ public class RPG_alt {
                     addSecondaryWeapon();
                     menuInput = mainMenu();
                     break;
-                //case 2:
-                //    adicionarHabilidade();
-                //    menuInput = mainMenu();
-                //    break;
-                //case 3:
-                //    showChampionsInfo();
-                //    menuInput = mainMenu();
-                //    break;
+                case 3:
+                    addSkillToChampion();
+                    menuInput = mainMenu();
+                    break;
+                case 4:
+                    showChampionInfo();
+                    menuInput = mainMenu();
+                    break;
                 case 5:
                     showChampionsList();
                     menuInput = mainMenu();
                     break;
-                //     break;
-                // case 5:
-                //     batalhar(personagens);
-                //     break;
-                // case 6:
-                //     JOptionPane.showMessageDialog(null, "Obrigado por jogar! Até mais!");
-                //     break;
-                // default:
-                //     JOptionPane.showMessageDialog(null, "Opção inválida. Por favor, escolha uma opção válida.");
-                //     break;
+                case 6:
+                    battle();
+                    menuInput = mainMenu();
+                    break;
+                case 7:
+                    addAttributesToChampion();
+                    menuInput = mainMenu();
+                    break;    
             }
         }
     }
@@ -86,40 +86,170 @@ public class RPG_alt {
         primaryWeaponsList.add(escopeta);
     }
 
-    public static void createUserInputedWeapon(String weaponType) {
-        Integer attackDefense = Integer.parseInt(JOptionPane.showInputDialog("Qual será valor de ataque e defesa de sua arma?"));
+    public static void createSkillsPreDefinedKit(){
+        Habilidade detectarArmadilhas = new Habilidade("Detectar Armadilhas", "Permite ao personagem detectar armadilhas ocultas em seu ambiente.", "Poder", 3);
+        Habilidade furtividade = new Habilidade("Furtividade", "Permite ao personagem se mover silenciosamente e passar despercebido pelos inimigos.", "Destreza", 2);
+        Habilidade ataqueDuplo = new Habilidade("Ataque Duplo", "Permite ao personagem realizar dois ataques consecutivos em um único turno de combate.", "Força", 4);
+        Habilidade curaRapida = new Habilidade("Cura Rápida", "Permite ao personagem recuperar pontos de vida de forma mais eficiente durante a cura.", "Vitalidade", 3);
+        Habilidade magiaElemental = new Habilidade("Magia Elemental", "Permite ao personagem lançar magias de elementos como fogo, água, ar ou terra.", "Poder", 5);
+        skillsList.addAll(Arrays.asList(detectarArmadilhas, furtividade, ataqueDuplo, curaRapida, magiaElemental));
+    }
+
+    public static void createUserInputedWeapon(String weaponType){
+        Integer attackDefense = Integer.parseInt(JOptionPane.showInputDialog("Qual será o valor de ataque e defesa de sua arma?"));
         Integer weigth = Integer.parseInt(JOptionPane.showInputDialog("Qual será o peso da sua arma?"));
         String name = JOptionPane.showInputDialog("Qual será o nome da sua arma?");
-        if (weaponType == "primária"){
-            Arma userWeapon = new Arma(attackDefense, weigth, name, "primária");
+
+       Arma userWeapon = new Arma(attackDefense, weigth, name, weaponType);
+        if (weaponType.equalsIgnoreCase("primária")){
             primaryWeaponsList.add(userWeapon);
         }
         else{
-            Arma userWeapon = new Arma(attackDefense, weigth, name, "secundária");
             secondaryWeaponsList.add(userWeapon);
         }
     }
 
+    public static void createUserInputedSkill(){
+        String name = JOptionPane.showInputDialog("Qual será o nome da sua habilidade?");
+        Integer power = Integer.parseInt(JOptionPane.showInputDialog("Qual será o valor de poder mínimo de sua habilidade?"));
+        String type = JOptionPane.showInputDialog("Qual será o tipo de poder de sua habilidade?\n (Força, Vitalidade, Destreza ou Poder)");
+        String description = JOptionPane.showInputDialog("O que essa habilidade faz?");
+
+        Habilidade userSkill = new Habilidade(name, description, type, power);
+        skillsList.add(userSkill);
+    }
+
     public static String createPrimaryWeaponsMenu(){
-        String mensagemArmas = "Armas disponíveis:\n0. Criar nova arma\n";
+        String weaponsMessage = "Armas disponíveis:\n0. Criar nova arma\n";
         for (int i = 0; i < primaryWeaponsList.size(); i++) {
             Arma arma = primaryWeaponsList.get(i);
-            mensagemArmas += (i + 1) + ". " + arma.getTipo() + " - Ataque/Defesa: " + arma.getAtaqueDefesa() + " | Peso: " + arma.getPeso() + " | Posição: " + arma.getPosicaoArma() + "\n";
+            weaponsMessage += (i + 1) + ". " + arma.getTipo() + " - Ataque/Defesa: " + arma.getAtaqueDefesa() + " | Peso: " + arma.getPeso() + " | Posição: " + arma.getPosicaoArma() + "\n";
         }
 
-        return mensagemArmas;
+        return weaponsMessage;
     }
 
     public static String createSecondaryWeaponsMenu(){
-        String mensagemArmas = "Armas secundárias disponíveis:\n0. Criar nova arma\n";
+        String weaponsMessage = "Armas secundárias disponíveis:\n0. Criar nova arma\n";
         for (int i = 0; i < secondaryWeaponsList.size(); i++) {
             Arma arma = secondaryWeaponsList.get(i);
-            mensagemArmas += (i + 1) + ". " + arma.getTipo() + " - Ataque/Defesa: " + arma.getAtaqueDefesa() + " | Peso: " + arma.getPeso() + " | Posição: " + arma.getPosicaoArma() + "\n";
+            weaponsMessage += (i + 1) + ". " + arma.getTipo() + " - Ataque/Defesa: " + arma.getAtaqueDefesa() + " | Peso: " + arma.getPeso() + " | Posição: " + arma.getPosicaoArma() + "\n";
         }
 
-        return mensagemArmas;
+        return weaponsMessage;
     }
 
+    public static String createSkillMenu(){
+        String skillMessage = "Habilidades disponíveis:\n0. Criar nova habilidade\n";
+        for (int i = 0; i < skillsList.size(); i++) {
+            Habilidade skill = skillsList.get(i);
+            skillMessage += (i + 1) + ". " + skill.getNome() + " - Poder mínimo: " + skill.getPoderMinimo() + " | Descrição: " + skill.getDescricao() + " | Tipo: " + skill.getTipoAtributo() + "\n";
+        }
+
+        return skillMessage;
+    }
+
+    public static String createChampionsMenu(){
+        String championsMessage = "Personagens disponíveis:\n0. Criar novo personagem\n";
+        for (int i = 0; i < championsList.size(); i++) {
+            Personagem champion = championsList.get(i);
+            Integer xpToNextLevel = 1000 * champion.getNivel();
+
+            String mainWeapon = "";
+            String secondaryWeapon = "";
+
+            if (champion.getArmaPrimaria() == null){mainWeapon = "Não há";}
+            else {mainWeapon = champion.getArmaPrimaria().getTipo();}
+            if (champion.getArmaSecundaria() == null){secondaryWeapon = "Não há";}
+            else {secondaryWeapon = champion.getArmaSecundaria().getTipo();}
+
+            championsMessage += "Personagem " + (i + 1) + ". " 
+                + "Nome: " + champion.getNome() 
+                + " - Nível: " + champion.getNivel() 
+                + " - Status XP: " + champion.getXpExcedente() + "/" + xpToNextLevel 
+                + " - Pontos de Atributo Disponíveis: " + champion.getPontosDisponiveis() + "\n"
+                + " - Armas do personagem: " + mainWeapon + " - " + secondaryWeapon;
+            xpToNextLevel = 0;
+        }
+
+        return championsMessage;
+    }
+
+    public static List<Integer> createInitialAttributesMenu(){
+        List<Integer> returnList = new ArrayList<>();
+
+        Integer initialPoints = 10;
+        Integer remainingPoints = 10;
+        Integer strength, vitality, dexterity, power;
+        Integer attributes = 4;
+     
+        JOptionPane.showMessageDialog(
+            null, 
+            "Você tem " + initialPoints + 
+            " pontos iniciais para distribuir entre seus atributos: Força, Vitalidade, Destreza e Poder."
+        );
+
+        strength = setAttributes("Força", attributes, initialPoints);
+        remainingPoints = initialPoints - strength;
+        attributes -= 1;
+                
+        vitality = setAttributes("Vitalidade", attributes, remainingPoints);
+        remainingPoints -= vitality;
+        attributes -= 1;
+        
+        dexterity = setAttributes("Destreza", attributes, remainingPoints);
+        remainingPoints -= dexterity;
+        attributes -= 1;
+                
+        power = setAttributes("Poder", attributes, remainingPoints);
+        remainingPoints -= power;
+        attributes -= 1;
+
+        returnList.addAll(Arrays.asList(dexterity, vitality, power, strength, remainingPoints));
+        return returnList;
+    }
+
+    private static Integer setAttributes(
+        String attribute,
+        Integer attributesCount,
+        Integer points
+    ) {
+        Integer minimumPoints = 1;
+        Integer maximumPoints = points - attributesCount + 1;
+        Integer sequentialAttribute = attributesCount - 1;
+
+        while (true) {
+            Integer attributeUserValue = Integer.parseInt(
+                JOptionPane.showInputDialog(
+                    "Pontuação mínima por atributo: " + minimumPoints + "\n" +
+                    "Atributos a seguir: " + sequentialAttribute + "\n" +
+                    "Pontos disponíveis: " + attributesCount + "\n" +
+                    "Pontuação disponível para este atributo: " + maximumPoints + "\n" +
+                    "Digite os pontos que deseja atribuir para " + attribute
+                )
+            );
+            if (attributeUserValue > 0 && attributeUserValue <= maximumPoints) {
+                return attributeUserValue;
+            }
+            else {
+                if (attributeUserValue <= 0) {
+                    JOptionPane.showMessageDialog(
+                        null, "O valor do atributo deve ser no mínimo " + minimumPoints
+                    );
+                } 
+                else if ((sequentialAttribute == 2 && points <= 3) || (sequentialAttribute == 1 && points <= 2)) {
+                    JOptionPane.showMessageDialog(
+                        null, "O valor do atributo deve ser " + minimumPoints + ", pois existem mais atributos que precisarão de pelo menos 1 ponto cada."
+                    );
+                } 
+                else {
+                    JOptionPane.showMessageDialog(
+                        null, "O valor do atributo deve ser entre 1 e " + maximumPoints + ", pois existem mais atributos que precisarão de pelo menos 1 ponto cada."
+                    );
+                }
+            }
+        }
+    }
 
     // Menu functions
     public static void createChampion(){
@@ -130,13 +260,26 @@ public class RPG_alt {
         Integer weaponMenuUserOption = 1;
         weaponMenuUserOption = Integer.parseInt(JOptionPane.showInputDialog(createPrimaryWeaponsMenu() + "Digite o número correspondente à arma desejada:"));
 
-        while(weaponMenuUserOption == 0 ){
+        while(weaponMenuUserOption == 0){
             createUserInputedWeapon("primária");
             weaponMenuUserOption = Integer.parseInt(JOptionPane.showInputDialog(createPrimaryWeaponsMenu() + "Digite o número correspondente à arma desejada:"));
         }
     
-        Personagem championObj = new Personagem(name, description, age, primaryWeaponsList.get(weaponMenuUserOption - 1));
+        List<Integer> attributesList = createInitialAttributesMenu();
+
+        Personagem championObj = new Personagem(
+            name, 
+            description, 
+            age,
+            attributesList.get(0),
+            attributesList.get(1),
+            attributesList.get(2),
+            attributesList.get(3),
+            attributesList.get(4),
+            primaryWeaponsList.get(weaponMenuUserOption - 1)
+        );
         championsList.add(championObj);
+
         JOptionPane.showMessageDialog(null, "Personagem criado com sucesso.");
     }
 
@@ -153,7 +296,7 @@ public class RPG_alt {
         Integer userInput = Integer.parseInt(JOptionPane.showInputDialog(null, returnMessage));
         if (userInput != 0){
             weaponMenuUserOption = Integer.parseInt(JOptionPane.showInputDialog(createSecondaryWeaponsMenu() + "Digite o número correspondente à arma desejada:"));
-            while(weaponMenuUserOption == 0 ){
+            while(weaponMenuUserOption == 0){
                 createUserInputedWeapon("secundária");
                 weaponMenuUserOption = Integer.parseInt(JOptionPane.showInputDialog(createSecondaryWeaponsMenu() + "Digite o número correspondente à arma desejada:"));
             }
@@ -167,129 +310,148 @@ public class RPG_alt {
 
     public static void showChampionsList(){
         String returnMessage = "======= Lista de personagens atual =======";
+
         for (int i = 0; i < championsList.size(); i++) {
             Personagem champion = championsList.get(i);
             String mainWeapon = "";
             String secondaryWeapon = "";
+            String skills = "";
 
             if (champion.getArmaPrimaria() == null){mainWeapon = "Não há";}
             else {mainWeapon = champion.getArmaPrimaria().getTipo();}
             if (champion.getArmaSecundaria() == null){secondaryWeapon = "Não há";}
             else {secondaryWeapon = champion.getArmaSecundaria().getTipo();}
 
+            if (champion.getHabilidades() == null){skills = "Não há";}
+            else {
+                for (Habilidade skill : champion.getHabilidades()) {
+                    skills += "\n       Habilidade: " + skill.getNome() + "\n";
+                    skills += "       Tipo: " + skill.getTipoAtributo() + "\n";
+                    skills += "       Poder mínimo: " + skill.getPoderMinimo() + "\n";
+                    skills += "       Descrição: " + skill.getDescricao()+ "\n";
+                }
+            }
+
             returnMessage += "\nPersonagem " + (i + 1) + ": \n";
             returnMessage += "  Nome: " + champion.getNome() + "\n";
-            returnMessage += "  Armas atuais: (Primária: " + mainWeapon + " / Secundária: " + secondaryWeapon + ")";
+            returnMessage += "  Armas atuais: (Primária: " + mainWeapon + " / Secundária: " + secondaryWeapon + ")\n";
+            returnMessage += "  Habilidades atuais: " + skills;
         }
+
         JOptionPane.showMessageDialog(null, returnMessage);
     }
 
-}
+    public static void showChampionInfo(){
+        String championReturnMessage = "======= Selecione o personagem =======\n0. Retornar para o menu";
 
-        // Integer userWelcomeChoice = scan.nextInt();
+        for (int i = 0; i < championsList.size(); i++) {
+            Personagem champion = championsList.get(i);
+            championReturnMessage += "\nPersonagem " + (i + 1) + ": \n";
+            championReturnMessage += "  Nome: " + champion.getNome();
+        }
 
-        // if (userWelcomeChoice == 1){
-        //     scan.nextLine();
-        //     while (createNextChampionBool){
-        //         Weapon weaponObj = new Weapon();
-        //         List<String> userWeaponTypes = new ArrayList<>();
-        //         //Habilities habilitiesObj = new Habilities();
+        Integer userChampionInput = Integer.parseInt(JOptionPane.showInputDialog(null, championReturnMessage));
+        if (userChampionInput != 0){
+            Personagem champion = championsList.get(userChampionInput - 1);
+            String returnMessage = "";
+            String mainWeapon = "";
+            String secondaryWeapon = "";
+            String skills = "";
 
-        //         System.out.println(
-        //             "Coloque aqui o nome que você gostaria de dar ao seu personagem:"
-        //         );
-        //         String championName = scan.nextLine();
+            if (champion.getArmaPrimaria() == null){mainWeapon = "Não há";}
+            else {mainWeapon = champion.getArmaPrimaria().getTipo();}
+            if (champion.getArmaSecundaria() == null){secondaryWeapon = "Não há";}
+            else {secondaryWeapon = champion.getArmaSecundaria().getTipo();}
 
-        //         System.out.println(
-        //             "Coloque aqui o nível inicial do seu personagem:"
-        //         );
-        //         Integer championLevel = scan.nextInt();
-
-        //         scan.nextLine(); // cleaning scanner for the next input
-
-        //         System.out.println(
-        //             "Coloque aqui a descrição que você gostaria de dar ao seu personagem:"
-        //         );
-        //         String championDescription = scan.nextLine();
-
-        //         System.out.println(
-        //             "Coloque aqui a idade de seu personagem:"
-        //         );
-        //         Integer championAge = scan.nextInt();
-
-        //         System.out.println(
-        //             "Coloque aqui o valor de força inicial do seu personagem:"
-        //         );
-        //         Integer championPower = scan.nextInt();
-
-        //         System.out.println(
-        //             "Coloque aqui o valor de vitalidade inicial do seu personagem:"
-        //         );
-        //         Integer championVitality = scan.nextInt();
-
-        //         System.out.println(
-        //             "Coloque aqui o valor de destreza inicial do seu personagem:"
-        //         );
-        //         Integer championDexterity = scan.nextInt();
-
-        //         System.out.println(
-        //             "Coloque aqui o dano de ataque inicial do seu personagem:" // dano de ataque = atributo de força
-        //         );
-        //         Integer championAttackDmg = scan.nextInt();
-
-        //         System.out.println(
-        //             "Escolha uma ou mais, separado por vírgulas, sem espaço entre cada uma, "
-        //             + "tipos de armas primarias que seu personagem terá." +
-        //             "\nTipos de armas possíveis são: espada, machado, pistola, escopeta"
-        //         );
-        //         userWeaponTypes.addAll(Arrays.asList(scan.next().split("\\,")));
-        //         DefWeapon(userWeaponTypes, weaponObj);
-
-        //         Champion championObj = new Champion(
-        //             championName, 
-        //             championLevel, 
-        //             championDescription, 
-        //             championAge, 
-        //             championPower,
-        //             championVitality,
-        //             championDexterity,
-        //             championAttackDmg,
-        //             weaponObj
-        //         );
-        //         userChampionsList.add(championObj);
-                
-        //         System.out.println(
-        //             "\nDigite: 1 - Para criar mais um personagem | 2 - Para listar os personagens existentes e seus atributos" +
-        //             " | 3 - Para sair"
-        //         );
-        //         Integer userChoice = scan.nextInt();
-
-        //         if (userChoice.equals(3)){
-        //             createNextChampionBool = false;
-        //         }
-        //         if (userChoice.equals(2)){
-        //             Integer i = 1;
-        //             for (Champion champion: userChampionsList){
-        //                 System.out.println(
-        //                     "\nPersonagem " + i.toString() + ": \n"
-        //                     + "Nome: " + champion.getChampionName()
-        //                     + "\nDescrição: " + champion.getChampionDescription()
-        //                     + "\nIdade: " + champion.getChampionAge()
-        //                     + "\nNível: " + champion.getChampionLevel()
-        //                     + "\nArma(s) primária(s): " + champion.getChampionPrimaryWeapon()
-        //                     + "\nForça: " + champion.getChampionPower()
-        //                     + "\nVitalidade: " + champion.getChampionVitality()
-        //                     + "\nDestreza: " + champion.getChampionDexterity()
-        //                     + "\nDano de ataque básico: " + champion.getChampionAttackDmg()
-        //                 );
-        //                 i++;
-        //             }
-        //             createNextChampionBool = false;
-        //         }
-        //         else{
-        //             System.out.println("");
-        //             scan.nextLine();
-        //         }
-        //     }
-        // }
+            if (champion.getHabilidades() == null){skills = "Não há";}
+            else {
+                for (Habilidade skill : champion.getHabilidades()) {
+                    skills += "\n       Habilidade: " + skill.getNome() + "\n";
+                    skills += "       Tipo: " + skill.getTipoAtributo() + "\n";
+                    skills += "       Poder mínimo: " + skill.getPoderMinimo() + "\n";
+                    skills += "       Descrição: " + skill.getDescricao()+ "\n";
+                }
+            }
+            returnMessage += "Nome: " + champion.getNome() + "\n";
+            returnMessage += "  Armas atuais: (Primária: " + mainWeapon + " / Secundária: " + secondaryWeapon + ")\n";
+            returnMessage += "  Descrição: " + champion.getDescricao() + "\n";
+            returnMessage += "  Idade: " + champion.getIdade() + "\n";
+            returnMessage += "  Nível: " + champion.getNivel() + "\n";
+            returnMessage += "  Poder: " + champion.getPoder() + "\n";
+            returnMessage += "  Força: " + champion.getForca() + "\n";
+            returnMessage += "  Destreza: " + champion.getDestreza() + "\n";
+            returnMessage += "  Vitalidade: " + champion.getVitadidade() + "\n";
+            returnMessage += "  Habilidades atuais: " + skills;
     
+            JOptionPane.showMessageDialog(null, returnMessage);
+        }
+    }
+
+    public static void addSkillToChampion(){
+        Integer skillMenuUserOption = 1;
+        String championReturnMessage = "======= Selecione o personagem que irá ter a habilidade =======\n0. Retornar para o menu";
+
+        for (int i = 0; i < championsList.size(); i++) {
+            Personagem champion = championsList.get(i);
+            championReturnMessage += "\nPersonagem " + (i + 1) + ": \n";
+            championReturnMessage += "  Nome: " + champion.getNome();
+        }
+
+        Integer userChampionInput = Integer.parseInt(JOptionPane.showInputDialog(null, championReturnMessage));
+
+        if (userChampionInput != 0){
+            Personagem champion = championsList.get(userChampionInput - 1);
+
+            skillMenuUserOption = Integer.parseInt(JOptionPane.showInputDialog(createSkillMenu() + "Digite o número correspondente à habilidade desejada:"));
+            while(skillMenuUserOption == 0){
+                createUserInputedSkill();
+                skillMenuUserOption = Integer.parseInt(JOptionPane.showInputDialog(createSkillMenu() + "Digite o número correspondente à habilidade desejada:"));
+            }
+            Habilidade skill = skillsList.get(skillMenuUserOption - 1);
+            champion.inserirHabilidade(skill);
+
+            JOptionPane.showMessageDialog(null, "Habilidade de " + skill.getTipoAtributo() + " atribuida com sucesso ao personagem " + champion.getNome());
+        }
+    }
+
+    private static void battle(){
+        Integer championMenuUserOption = Integer.parseInt(JOptionPane.showInputDialog(createChampionsMenu()));
+        if (championMenuUserOption == 0){
+            while (championMenuUserOption == 0){
+                createChampion();
+                championMenuUserOption = Integer.parseInt(JOptionPane.showInputDialog(createChampionsMenu()));
+            }
+        }
+
+        Personagem champion = championsList.get(championMenuUserOption - 1);
+        JOptionPane.showMessageDialog(null, "Batalha iniciada utilizando o personagem " + champion.getNome() + "!");
+
+        Random random = new Random();
+        int xpGanho = random.nextInt(1000) + 1;
+
+        champion.setXp(champion.getXp() + xpGanho);
+        champion.setXpExcedente(champion.getXpExcedente() + xpGanho);
+        JOptionPane.showMessageDialog(null, "XP ganho na batalha: " + xpGanho);
+
+        Integer xpParaProximoNivel = 1000 * champion.getNivel();
+        if (champion.getXpExcedente() >= xpParaProximoNivel) {
+            champion.setNivel(champion.getNivel() + 1);
+
+            int xpExcedente = champion.getXpExcedente() - xpParaProximoNivel;
+            champion.setXpExcedente(xpExcedente);
+
+            int pontosGanhos = 1;
+            champion.setPontosDisponiveis(champion.getPontosDisponiveis() + pontosGanhos);
+
+            JOptionPane.showMessageDialog(
+                null, 
+                "Parabéns! O personagem " + champion.getNome() 
+                + " subiu para o nível " + champion.getNivel() 
+                + " e ganhou " + pontosGanhos + " ponto de atributo."
+            );
+        }
+    }
+
+    private static void addAttributesToChampion(){
+    }
+}
