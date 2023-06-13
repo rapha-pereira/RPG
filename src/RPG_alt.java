@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import javax.print.attribute.standard.JobHoldUntil;
 import javax.swing.JOptionPane;
 import java.util.List;
 import java.util.Random;
@@ -69,7 +70,7 @@ public class RPG_alt {
                     menuInput = mainMenu();
                     break;
                 case 7:
-                    addAttributesToChampion();
+                    addAttributesPointsToChampion();
                     menuInput = mainMenu();
                     break;    
             }
@@ -223,7 +224,7 @@ public class RPG_alt {
                 JOptionPane.showInputDialog(
                     "Pontuação mínima por atributo: " + minimumPoints + "\n" +
                     "Atributos a seguir: " + sequentialAttribute + "\n" +
-                    "Pontos disponíveis: " + attributesCount + "\n" +
+                    "Pontos disponíveis: " + points + "\n" +
                     "Pontuação disponível para este atributo: " + maximumPoints + "\n" +
                     "Digite os pontos que deseja atribuir para " + attribute
                 )
@@ -416,6 +417,7 @@ public class RPG_alt {
         }
     }
 
+    
     private static void battle(){
         Integer championMenuUserOption = Integer.parseInt(JOptionPane.showInputDialog(createChampionsMenu()));
         if (championMenuUserOption == 0){
@@ -454,6 +456,167 @@ public class RPG_alt {
         }
     }
 
-    private static void addAttributesToChampion(){
+    private static void addAttributesPointsToChampion(){
+
+        String returnMessage = "======= Selecione o personagem que voce deseja atribuir os pontos =======\n0. Retornar para o menu";
+        Integer userRequestedPoints = null;
+
+        for (int i = 0; i < championsList.size(); i++) {
+            Personagem champion = championsList.get(i);
+            returnMessage += "\nPersonagem " + (i + 1) + ": \n";
+            returnMessage += "  Nome: " + champion.getNome();
+        }
+
+        Integer userInput = Integer.parseInt(JOptionPane.showInputDialog(null, returnMessage));
+        if (userInput != 0){
+            Personagem champion = championsList.get(userInput - 1);
+            if (champion.getPontosDisponiveis() <= 0){
+                JOptionPane.showMessageDialog(null, "Você não tem pontos para atribuir a nenhum atributo. Batalhe.");
+            }
+            else{
+                Integer userOption = Integer.parseInt(
+                    JOptionPane.showInputDialog(
+                        null, 
+                        "Selecione o atributo que você deseja acrescentar os pontos\n" 
+                        + "1. Força\n"
+                        + "2. Vitalidade\n"
+                        + "3. Destreza\n"
+                        + "4. Poder\n"
+                    )
+                );
+                if (userOption == 1){
+                    userRequestedPoints = Integer.parseInt(
+                        JOptionPane.showInputDialog(
+                            null, 
+                            "Você tem " + champion.getPontosDisponiveis()
+                            + " para colocar no atributo força\n"
+                            + "Digite abaixo a qntde. de pontos que você deseja atribuir a força:"
+                        )
+                    );
+                    while (userRequestedPoints > champion.getPontosDisponiveis()){
+                        JOptionPane.showMessageDialog(
+                            null, 
+                            "Você digitou uma quantidade de pontos acima da que você tem disponível."
+                        );
+                        userRequestedPoints = Integer.parseInt(
+                            JOptionPane.showInputDialog(
+                                null, 
+                                "Você tem " + champion.getPontosDisponiveis()
+                                + " para colocar no atributo força\n"
+                                + "Digite abaixo a qntde. de pontos que você deseja atribuir a força:"
+                            )
+                        );
+                        if (userRequestedPoints < champion.getPontosDisponiveis()){
+                            champion.setForca(userRequestedPoints);
+                            champion.setPontosDisponiveis(champion.getPontosDisponiveis() - userRequestedPoints);
+                            JOptionPane.showMessageDialog(
+                                null,
+                                userRequestedPoints + " pontos atribuidos com sucesso ao atributo força" 
+                            );
+                        
+                        }
+                    }
+                }
+                if (userOption == 2){
+                    userRequestedPoints = Integer.parseInt(
+                        JOptionPane.showInputDialog(
+                            null, 
+                            "Você tem " + champion.getPontosDisponiveis()
+                            + " para colocar no atributo vitalidade\n"
+                            + "Digite abaixo a qntde. de pontos que você deseja atribuir a vitalidade:"
+                        )
+                    );
+                    while (userRequestedPoints > champion.getPontosDisponiveis()){
+                        JOptionPane.showMessageDialog(
+                            null, 
+                            "Você digitou uma quantidade de pontos acima da que você tem disponível."
+                        );
+                        userRequestedPoints = Integer.parseInt(
+                            JOptionPane.showInputDialog(
+                                null, 
+                                "Você tem " + champion.getPontosDisponiveis()
+                                + " para colocar no atributo vitalidade\n"
+                                + "Digite abaixo a qntde. de pontos que você deseja atribuir a vitalidade:"
+                            )
+                        );
+                        if (userRequestedPoints < champion.getPontosDisponiveis()){
+                            champion.setVitadidade(userRequestedPoints);
+                            champion.setPontosDisponiveis(champion.getPontosDisponiveis() - userRequestedPoints);
+                            JOptionPane.showMessageDialog(
+                                null,
+                                userRequestedPoints + " pontos atribuidos com sucesso ao atributo vitalidade" 
+                            );
+                        
+                        }
+                    }
+                }
+                if (userOption == 3){
+                    userRequestedPoints = Integer.parseInt(
+                        JOptionPane.showInputDialog(
+                            null, 
+                            "Você tem " + champion.getPontosDisponiveis()
+                            + " para colocar no atributo destreza\n"
+                            + "Digite abaixo a qntde. de pontos que você deseja atribuir a destreza:"
+                        )
+                    );
+                    while (userRequestedPoints > champion.getPontosDisponiveis()){
+                        JOptionPane.showMessageDialog(
+                            null, 
+                            "Você digitou uma quantidade de pontos acima da que você tem disponível."
+                        );
+                        userRequestedPoints = Integer.parseInt(
+                            JOptionPane.showInputDialog(
+                                null, 
+                                "Você tem " + champion.getPontosDisponiveis()
+                                + " para colocar no atributo destreza\n"
+                                + "Digite abaixo a qntde. de pontos que você deseja atribuir a destreza:"
+                            )
+                        );
+                        if (userRequestedPoints < champion.getPontosDisponiveis()){
+                            champion.setDestreza(userRequestedPoints);
+                            champion.setPontosDisponiveis(champion.getPontosDisponiveis() - userRequestedPoints);
+                            JOptionPane.showMessageDialog(
+                                null,
+                                userRequestedPoints + " pontos atribuidos com sucesso ao atributo destreza" 
+                            );
+                        
+                        }
+                    }
+                }
+                if (userOption == 4){
+                    userRequestedPoints = Integer.parseInt(
+                        JOptionPane.showInputDialog(
+                            null, 
+                            "Você tem " + champion.getPontosDisponiveis()
+                            + " para colocar no atributo destreza\n"
+                            + "Digite abaixo a qntde. de pontos que você deseja atribuir a poder:"
+                        )
+                    );
+                    while (userRequestedPoints > champion.getPontosDisponiveis()){
+                        JOptionPane.showMessageDialog(
+                            null, 
+                            "Você digitou uma quantidade de pontos acima da que você tem disponível."
+                        );
+                        userRequestedPoints = Integer.parseInt(
+                            JOptionPane.showInputDialog(
+                                null, 
+                                "Você tem " + champion.getPontosDisponiveis()
+                                + " para colocar no atributo poder\n"
+                                + "Digite abaixo a qntde. de pontos que você deseja atribuir a poder:"
+                            )
+                        );
+                        if (userRequestedPoints < champion.getPontosDisponiveis()){
+                            champion.setPoder(userRequestedPoints);
+                            champion.setPontosDisponiveis(champion.getPontosDisponiveis() - userRequestedPoints);
+                            JOptionPane.showMessageDialog(
+                                null,
+                                userRequestedPoints + " pontos atribuidos com sucesso ao atributo poder" 
+                            );
+                        
+                        }
+                    }
+                }
+            }
+        }
     }
 }

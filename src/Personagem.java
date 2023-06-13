@@ -132,16 +132,36 @@ public class Personagem {
         this.idade = idade;
     }
     public void setForca(int forca) {
-        this.forca = forca;
+        if (forca >= 10){
+            this.forca = 10;
+        }
+        else{
+            this.forca = forca;
+        }
     }
     public void setVitadidade(int vitalidade) {
-        this.vitalidade = vitalidade;
+        if (vitalidade >= 10){
+            this.vitalidade = 10;
+        }
+        else{
+            this.vitalidade = vitalidade;
+        }
     }
     public void setDestreza(int destreza) {
-        this.destreza = destreza;
+        if (destreza >= 10){
+            this.destreza = 10;
+        }
+        else{
+            this.destreza = destreza;
+        }
     }
     public void setPoder(int poder) {
-        this.poder = poder;
+        if (poder >= 10){
+            this.poder = 10;
+        }
+        else{
+            this.poder = poder;
+        }
     }
     
     public void setArmaPrimaria(Arma armaPrimaria) {
