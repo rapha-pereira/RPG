@@ -313,6 +313,7 @@ public class RPG_alt {
 
         for (int i = 0; i < championsList.size(); i++) {
             Personagem champion = championsList.get(i);
+            Integer xpParaProximoNivel = 1000 * champion.getNivel();
             String mainWeapon = "";
             String secondaryWeapon = "";
             String skills = "";
@@ -331,9 +332,9 @@ public class RPG_alt {
                     skills += "       Descrição: " + skill.getDescricao()+ "\n";
                 }
             }
-
+            
             returnMessage += "\nPersonagem " + (i + 1) + ": \n";
-            returnMessage += "  Nome: " + champion.getNome() + "\n";
+            returnMessage += "  Nome: " + champion.getNome() + "  Nível: " + champion.getNivel() + " - XP: " + champion.getXpExcedente() + "/" + xpParaProximoNivel + "\n";
             returnMessage += "  Armas atuais: (Primária: " + mainWeapon + " / Secundária: " + secondaryWeapon + ")\n";
             returnMessage += "  Habilidades atuais: " + skills;
         }
@@ -353,6 +354,7 @@ public class RPG_alt {
         Integer userChampionInput = Integer.parseInt(JOptionPane.showInputDialog(null, championReturnMessage));
         if (userChampionInput != 0){
             Personagem champion = championsList.get(userChampionInput - 1);
+            Integer xpParaProximoNivel = 1000 * champion.getNivel();
             String returnMessage = "";
             String mainWeapon = "";
             String secondaryWeapon = "";
@@ -376,7 +378,7 @@ public class RPG_alt {
             returnMessage += "  Armas atuais: (Primária: " + mainWeapon + " / Secundária: " + secondaryWeapon + ")\n";
             returnMessage += "  Descrição: " + champion.getDescricao() + "\n";
             returnMessage += "  Idade: " + champion.getIdade() + "\n";
-            returnMessage += "  Nível: " + champion.getNivel() + "\n";
+            returnMessage += "  Nível: " + champion.getNivel() + " - XP: " + champion.getXpExcedente() + "/" + xpParaProximoNivel + "\n";
             returnMessage += "  Poder: " + champion.getPoder() + "\n";
             returnMessage += "  Força: " + champion.getForca() + "\n";
             returnMessage += "  Destreza: " + champion.getDestreza() + "\n";
