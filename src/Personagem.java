@@ -1,12 +1,13 @@
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
+import javax.swing.JOptionPane;
+
 public class Personagem {
     private String nome, descricao;
     private Integer nivel, idade, forca, vitalidade, destreza, poder, pontosDisponiveis, xp, xpExcedente;
     private Arma armaPrimaria, armaSecundaria;
     private ArrayList<Habilidade> habilidades = new ArrayList<>();
-    
     
     public Personagem(
         String nome, 
@@ -33,6 +34,14 @@ public class Personagem {
         this.xpExcedente = 0;
         this.pontosDisponiveis = pontosDisponiveis;
         definirArmaPersonagem(arma);
+        this.forca = forca;
+        this.vitalidade = vitalidade;
+        this.destreza = destreza;
+        this.poder = poder;
+        this.nivel = 1;
+        this.xp = 0;
+        this.xpExcedente = 0;
+        this.pontosDisponiveis = pontosDisponiveis;
     }
     
     public void preencherAtributos() {
@@ -107,6 +116,15 @@ public class Personagem {
     public Integer getPoder() {
         return this.poder;
     }
+    public int getPontosDisponiveis() {
+        return pontosDisponiveis;
+    }
+    public int getXp() {
+        return this.xp;
+    }
+    public int getXpExcedente() {
+        return xpExcedente;
+    }
     
     public Arma getArmaPrimaria() {
         return this.armaPrimaria;
@@ -163,6 +181,15 @@ public class Personagem {
             this.poder = poder;
         }
     }
+    public void setPontosDisponiveis(int pontosDisponiveis) {
+        this.pontosDisponiveis = pontosDisponiveis;
+    }
+    public void setXp(int xp) {
+        this.xp = xp;
+    }
+    public void setXpExcedente(int xpExcedente) {
+        this.xpExcedente = xpExcedente;
+    }
     
     public void setArmaPrimaria(Arma armaPrimaria) {
         this.armaPrimaria = armaPrimaria;
@@ -172,6 +199,7 @@ public class Personagem {
     }
     
     public void inserirHabilidade(Habilidade habilidade) {
+        this.habilidades = new ArrayList<>();
         this.habilidades.add(habilidade);
     }
 }
