@@ -411,9 +411,14 @@ public class RPG_alt {
                 skillMenuUserOption = Integer.parseInt(JOptionPane.showInputDialog(createSkillMenu() + "Digite o número correspondente à habilidade desejada:"));
             }
             Habilidade skill = skillsList.get(skillMenuUserOption - 1);
-            champion.inserirHabilidade(skill);
-
-            JOptionPane.showMessageDialog(null, "Habilidade de " + skill.getTipoAtributo() + " atribuida com sucesso ao personagem " + champion.getNome());
+            if (champion.getPoder() >= skill.getPoderMinimo()) {
+                champion.inserirHabilidade(skill);
+                JOptionPane.showMessageDialog(
+                    null, "Habilidade de " + skill.getTipoAtributo() + " atribuida com sucesso ao personagem " + champion.getNome());
+            } else {
+                JOptionPane.showMessageDialog(
+                    null, "O personagem não tem poder suficiente para escolher essa habilidade.");
+            }
         }
     }
 
