@@ -1,20 +1,38 @@
-package rpg;
-
 import java.util.ArrayList;
-import java.util.Scanner;
+import javax.swing.JOptionPane;
 
 import javax.swing.JOptionPane;
 
 public class Personagem {
     private String nome, descricao;
-    private int nivel, idade, forca, vitalidade, destreza, poder, pontosDisponiveis, xp, xpExcedente;
+    private Integer nivel, idade, forca, vitalidade, destreza, poder, pontosDisponiveis, xp, xpExcedente;
     private Arma armaPrimaria, armaSecundaria;
-    private ArrayList<Habilidade> habilidades;
+    private ArrayList<Habilidade> habilidades = new ArrayList<>();
     
-    public Personagem(String nome, String descricao, int idade, Arma arma, int forca, int vitalidade, int destreza, int poder, int pontosDisponiveis) {
+    public Personagem(
+        String nome, 
+        String descricao, 
+        Integer idade,
+        Integer destreza,
+        Integer vitalidade,
+        Integer poder,
+        Integer forca,
+        Integer pontosDisponiveis,
+        Arma arma
+    ) {
         this.nome = nome;
-        this.idade = idade;
         this.descricao = descricao;
+        this.idade = idade;
+        this.destreza = destreza;
+        this.vitalidade = vitalidade;
+        this.forca = forca;
+        this.vitalidade = vitalidade;
+        this.destreza = destreza;
+        this.poder = poder;
+        this.nivel = 1;
+        this.xp = 0;
+        this.xpExcedente = 0;
+        this.pontosDisponiveis = pontosDisponiveis;
         definirArmaPersonagem(arma);
         this.forca = forca;
         this.vitalidade = vitalidade;
@@ -26,14 +44,6 @@ public class Personagem {
         this.pontosDisponiveis = pontosDisponiveis;
     }
     
-    public void definirArmaPersonagem(Arma arma) {
-        if(arma.getPosicaoArma().equalsIgnoreCase("primaria")){
-            this.armaPrimaria = arma;
-        }else {
-            this.armaSecundaria = arma;
-        }
-    }
-    
     public void preencherAtributos() {
         this.forca = preencherUmAtributo("Força: ", pontosDisponiveis);
         this.poder = preencherUmAtributo("Poder: ", pontosDisponiveis);
@@ -41,9 +51,9 @@ public class Personagem {
         this.vitalidade = preencherUmAtributo("Vitalidade: ", pontosDisponiveis);
     }
     
-     public int preencherUmAtributo(String atributo, int pontosDisponiveis) {   
+     public int preencherUmAtributo(String atributo, Integer pontosDisponiveis) {   
         while(true) {
-            int valorAtributo = Integer.parseInt(JOptionPane.showInputDialog("Digite os pontos que deseja atribuir para " + atributo));
+            Integer valorAtributo = Integer.parseInt(JOptionPane.showInputDialog("Digite os pontos que deseja atribuir para " + atributo));
             if (valorAtributo > 0 && valorAtributo <= pontosDisponiveis) {
                 return valorAtributo;
             } else {
@@ -52,6 +62,35 @@ public class Personagem {
             }
         }
     }
+    
+    public void definirArmaPersonagem(Arma arma) {
+        if (arma.getPosicaoArma().equalsIgnoreCase("primária")){
+            this.armaPrimaria = arma;
+        }
+        else {
+            this.armaSecundaria = arma;
+        }
+    }
+
+    public Integer getXpExcedente(){
+        return this.xpExcedente;
+    }
+    public Integer getXp(){
+        return this.xp;
+    }
+    public Integer getPontosDisponiveis(){
+        return this.pontosDisponiveis;
+    }
+
+    public void setXpExcedente(Integer xpExcedente){
+        this.xpExcedente = xpExcedente;
+    }
+    public void setXp(Integer xp){
+        this.xp = xp;
+    }
+    public void setPontosDisponiveis(Integer pontosDisponiveis){
+        this.pontosDisponiveis = pontosDisponiveis;
+    }
 
     public String getNome() {
         return this.nome;
@@ -59,22 +98,22 @@ public class Personagem {
     public String getDescricao() {
         return this.descricao;
     }
-    public int getNivel() {
+    public Integer getNivel() {
         return this.nivel;
     }
-    public int getIdade() {
+    public Integer getIdade() {
         return this.idade;
     }
-    public int getForca() {
+    public Integer getForca() {
         return this.forca;
     }
-    public int getVitadidade() {
+    public Integer getVitalidade() {
         return this.vitalidade;
     }
-    public int getDestreza() {
+    public Integer getDestreza() {
         return this.destreza;
     }
-    public int getPoder() {
+    public Integer getPoder() {
         return this.poder;
     }
     public int getPontosDisponiveis() {
@@ -111,16 +150,36 @@ public class Personagem {
         this.idade = idade;
     }
     public void setForca(int forca) {
-        this.forca = forca;
+        if (forca >= 10){
+            this.forca = 10;
+        }
+        else{
+            this.forca = forca;
+        }
     }
-    public void setVitadidade(int vitalidade) {
-        this.vitalidade = vitalidade;
+    public void setVitalidade(int vitalidade) {
+        if (vitalidade >= 10){
+            this.vitalidade = 10;
+        }
+        else{
+            this.vitalidade = vitalidade;
+        }
     }
     public void setDestreza(int destreza) {
-        this.destreza = destreza;
+        if (destreza >= 10){
+            this.destreza = 10;
+        }
+        else{
+            this.destreza = destreza;
+        }
     }
     public void setPoder(int poder) {
-        this.poder = poder;
+        if (poder >= 10){
+            this.poder = 10;
+        }
+        else{
+            this.poder = poder;
+        }
     }
     public void setPontosDisponiveis(int pontosDisponiveis) {
         this.pontosDisponiveis = pontosDisponiveis;
@@ -143,5 +202,4 @@ public class Personagem {
         this.habilidades = new ArrayList<>();
         this.habilidades.add(habilidade);
     }
-    
 }
