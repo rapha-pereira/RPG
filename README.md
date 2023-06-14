@@ -1,18 +1,13 @@
 ## Getting Started
 
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
+This is an IFSC student class project* that creates an RPG game using Java, our currently learning programming language.
+It has basic behaviors, but it's experimental since we don't know Java, and it works entirely around objects/classes using OOP basics.
 
 ## Folder Structure
 
 The workspace contains two folders by default, where:
 
-- `src`: the folder to maintain sources
-- `lib`: the folder to maintain dependencies
+- `src`: the folder to maintain sources, the main RPG project
+- `lib`: the folder to maintain dependencies, such as Java.classes and etc.
 
-Meanwhile, the compiled output files will be generated in the `bin` folder by default.
-
-> If you want to customize the folder structure, open `.vscode/settings.json` and update the related settings there.
-
-## Dependency Management
-
-The `JAVA PROJECTS` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-dependency#manage-dependencies).
+*__Made by Rodrigo P. Nonato & Raphael P. Gomes__
