@@ -88,11 +88,11 @@ public class RPG_alt {
     }
 
     public static void createSkillsPreDefinedKit(){
-        Habilidade detectarArmadilhas = new Habilidade("Detectar Armadilhas", "Permite ao personagem detectar armadilhas ocultas em seu ambiente.", "Poder", 3);
-        Habilidade furtividade = new Habilidade("Furtividade", "Permite ao personagem se mover silenciosamente e passar despercebido pelos inimigos.", "Destreza", 2);
-        Habilidade ataqueDuplo = new Habilidade("Ataque Duplo", "Permite ao personagem realizar dois ataques consecutivos em um único turno de combate.", "Força", 4);
-        Habilidade curaRapida = new Habilidade("Cura Rápida", "Permite ao personagem recuperar pontos de vida de forma mais eficiente durante a cura.", "Vitalidade", 3);
-        Habilidade magiaElemental = new Habilidade("Magia Elemental", "Permite ao personagem lançar magias de elementos como fogo, água, ar ou terra.", "Poder", 5);
+        Habilidade detectarArmadilhas = new Habilidade("Detectar Armadilhas", "Permite ao personagem detectar armadilhas ocultas em seu ambiente.", "Poder", 1);
+        Habilidade furtividade = new Habilidade("Furtividade", "Permite ao personagem se mover silenciosamente e passar despercebido pelos inimigos.", "Destreza", 3);
+        Habilidade ataqueDuplo = new Habilidade("Ataque Duplo", "Permite ao personagem realizar dois ataques consecutivos em um único turno de combate.", "Força", 7);
+        Habilidade curaRapida = new Habilidade("Cura Rápida", "Permite ao personagem recuperar pontos de vida de forma mais eficiente durante a cura.", "Vitalidade", 5);
+        Habilidade magiaElemental = new Habilidade("Magia Elemental", "Permite ao personagem lançar magias de elementos como fogo, água, ar ou terra.", "Poder", 10);
         skillsList.addAll(Arrays.asList(detectarArmadilhas, furtividade, ataqueDuplo, curaRapida, magiaElemental));
     }
 
@@ -383,7 +383,7 @@ public class RPG_alt {
             returnMessage += "  Poder: " + champion.getPoder() + "\n";
             returnMessage += "  Força: " + champion.getForca() + "\n";
             returnMessage += "  Destreza: " + champion.getDestreza() + "\n";
-            returnMessage += "  Vitalidade: " + champion.getVitadidade() + "\n";
+            returnMessage += "  Vitalidade: " + champion.getVitalidade() + "\n";
             returnMessage += "  Habilidades atuais: " + skills;
     
             JOptionPane.showMessageDialog(null, returnMessage);
@@ -421,7 +421,6 @@ public class RPG_alt {
             }
         }
     }
-
     
     private static void battle(){
         Integer championMenuUserOption = Integer.parseInt(JOptionPane.showInputDialog(createChampionsMenu()));
@@ -494,7 +493,7 @@ public class RPG_alt {
                         JOptionPane.showInputDialog(
                             null, 
                             "Você tem " + champion.getPontosDisponiveis()
-                            + " para colocar no atributo força\n"
+                            + " pontos disponiveis para colocar no atributo força\n"
                             + "Digite abaixo a qntde. de pontos que você deseja atribuir a força:"
                         )
                     );
@@ -507,27 +506,25 @@ public class RPG_alt {
                             JOptionPane.showInputDialog(
                                 null, 
                                 "Você tem " + champion.getPontosDisponiveis()
-                                + " para colocar no atributo força\n"
+                                + " pontos disponiveis para colocar no atributo força\n"
                                 + "Digite abaixo a qntde. de pontos que você deseja atribuir a força:"
                             )
                         );
-                        if (userRequestedPoints < champion.getPontosDisponiveis()){
-                            champion.setForca(userRequestedPoints);
-                            champion.setPontosDisponiveis(champion.getPontosDisponiveis() - userRequestedPoints);
-                            JOptionPane.showMessageDialog(
-                                null,
-                                userRequestedPoints + " pontos atribuidos com sucesso ao atributo força" 
-                            );
-                        
-                        }
                     }
+
+                    champion.setForca(champion.getForca() + userRequestedPoints);
+                    champion.setPontosDisponiveis(champion.getPontosDisponiveis() - userRequestedPoints);
+                    JOptionPane.showMessageDialog(
+                        null,
+                        userRequestedPoints + " pontos atribuidos com sucesso ao atributo força" 
+                    );
                 }
                 if (userOption == 2){
                     userRequestedPoints = Integer.parseInt(
                         JOptionPane.showInputDialog(
                             null, 
                             "Você tem " + champion.getPontosDisponiveis()
-                            + " para colocar no atributo vitalidade\n"
+                            + " pontos disponiveis para colocar no atributo vitalidade\n"
                             + "Digite abaixo a qntde. de pontos que você deseja atribuir a vitalidade:"
                         )
                     );
@@ -540,27 +537,25 @@ public class RPG_alt {
                             JOptionPane.showInputDialog(
                                 null, 
                                 "Você tem " + champion.getPontosDisponiveis()
-                                + " para colocar no atributo vitalidade\n"
+                                + " pontos disponiveis para colocar no atributo vitalidade\n"
                                 + "Digite abaixo a qntde. de pontos que você deseja atribuir a vitalidade:"
                             )
                         );
-                        if (userRequestedPoints < champion.getPontosDisponiveis()){
-                            champion.setVitadidade(userRequestedPoints);
-                            champion.setPontosDisponiveis(champion.getPontosDisponiveis() - userRequestedPoints);
-                            JOptionPane.showMessageDialog(
-                                null,
-                                userRequestedPoints + " pontos atribuidos com sucesso ao atributo vitalidade" 
-                            );
-                        
-                        }
                     }
+                    
+                    champion.setVitalidade(champion.getVitalidade() + userRequestedPoints);
+                    champion.setPontosDisponiveis(champion.getPontosDisponiveis() - userRequestedPoints);
+                    JOptionPane.showMessageDialog(
+                        null,
+                        userRequestedPoints + " pontos atribuidos com sucesso ao atributo vitalidade" 
+                    );
                 }
                 if (userOption == 3){
                     userRequestedPoints = Integer.parseInt(
                         JOptionPane.showInputDialog(
                             null, 
                             "Você tem " + champion.getPontosDisponiveis()
-                            + " para colocar no atributo destreza\n"
+                            + " pontos disponiveis para colocar no atributo destreza\n"
                             + "Digite abaixo a qntde. de pontos que você deseja atribuir a destreza:"
                         )
                     );
@@ -573,27 +568,25 @@ public class RPG_alt {
                             JOptionPane.showInputDialog(
                                 null, 
                                 "Você tem " + champion.getPontosDisponiveis()
-                                + " para colocar no atributo destreza\n"
+                                + " pontos disponiveis para colocar no atributo destreza\n"
                                 + "Digite abaixo a qntde. de pontos que você deseja atribuir a destreza:"
                             )
                         );
-                        if (userRequestedPoints < champion.getPontosDisponiveis()){
-                            champion.setDestreza(userRequestedPoints);
-                            champion.setPontosDisponiveis(champion.getPontosDisponiveis() - userRequestedPoints);
-                            JOptionPane.showMessageDialog(
-                                null,
-                                userRequestedPoints + " pontos atribuidos com sucesso ao atributo destreza" 
-                            );
-                        
-                        }
                     }
+                        
+                    champion.setDestreza(champion.getDestreza() + userRequestedPoints);
+                    champion.setPontosDisponiveis(champion.getPontosDisponiveis() - userRequestedPoints);
+                    JOptionPane.showMessageDialog(
+                        null,
+                        userRequestedPoints + " pontos atribuidos com sucesso ao atributo destreza" 
+                    );
                 }
                 if (userOption == 4){
                     userRequestedPoints = Integer.parseInt(
                         JOptionPane.showInputDialog(
                             null, 
                             "Você tem " + champion.getPontosDisponiveis()
-                            + " para colocar no atributo destreza\n"
+                            + " pontos disponiveis para colocar no atributo poder\n"
                             + "Digite abaixo a qntde. de pontos que você deseja atribuir a poder:"
                         )
                     );
@@ -606,20 +599,18 @@ public class RPG_alt {
                             JOptionPane.showInputDialog(
                                 null, 
                                 "Você tem " + champion.getPontosDisponiveis()
-                                + " para colocar no atributo poder\n"
+                                + " pontos disponiveis para colocar no atributo poder\n"
                                 + "Digite abaixo a qntde. de pontos que você deseja atribuir a poder:"
                             )
                         );
-                        if (userRequestedPoints < champion.getPontosDisponiveis()){
-                            champion.setPoder(userRequestedPoints);
-                            champion.setPontosDisponiveis(champion.getPontosDisponiveis() - userRequestedPoints);
-                            JOptionPane.showMessageDialog(
-                                null,
-                                userRequestedPoints + " pontos atribuidos com sucesso ao atributo poder" 
-                            );
-                        
-                        }
                     }
+                    
+                    champion.setPoder(champion.getPoder() + userRequestedPoints);
+                    champion.setPontosDisponiveis(champion.getPontosDisponiveis() - userRequestedPoints);
+                    JOptionPane.showMessageDialog(
+                        null,
+                        userRequestedPoints + " pontos atribuidos com sucesso ao atributo poder"
+                    );
                 }
             }
         }

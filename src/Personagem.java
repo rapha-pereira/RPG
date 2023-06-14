@@ -98,7 +98,7 @@ public class Personagem {
     public Integer getForca() {
         return this.forca;
     }
-    public Integer getVitadidade() {
+    public Integer getVitalidade() {
         return this.vitalidade;
     }
     public Integer getDestreza() {
@@ -139,7 +139,7 @@ public class Personagem {
             this.forca = forca;
         }
     }
-    public void setVitadidade(int vitalidade) {
+    public void setVitalidade(int vitalidade) {
         if (vitalidade >= 10){
             this.vitalidade = 10;
         }
