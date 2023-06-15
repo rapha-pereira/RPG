@@ -27,7 +27,8 @@ public class RPG_alt {
                     "5 - Consultar lista de personagens\n" +
                     "6 - Batalhar\n" +
                     "7 - Adicionar pontos a um atributo\n" +
-                    "8 - Sair\n" +
+                    "8 - Alterar inventário de armas\n" +
+                    "9 - Sair\n" +
                     "Escolha uma opção:"
             )
         );
@@ -43,7 +44,7 @@ public class RPG_alt {
         createSkillsPreDefinedKit();
         menuInput = mainMenu();
 
-        while (menuInput != 8){
+        while (menuInput != 9){
             switch (menuInput) {
                 case 1:
                     createChampion();
@@ -72,7 +73,11 @@ public class RPG_alt {
                 case 7:
                     addAttributesPointsToChampion();
                     menuInput = mainMenu();
-                    break;    
+                    break;
+                case 8:
+                    createInventaryMenu();
+                    menuInput = mainMenu();
+                    break; 
             }
         }
     }
@@ -615,4 +620,54 @@ public class RPG_alt {
             }
         }
     }
+
+    public static void addPrimaryWeapon(){
+        Integer weaponMenuUserOption = 1;
+        String returnMessage = "======= Selecione o personagem que você deseja alterar a arma primária =======\n0. Retornar para o menu";
+
+        for (int i = 0; i < championsList.size(); i++) {
+            Personagem champion = championsList.get(i);
+            returnMessage += "\nPersonagem " + (i + 1) + ": \n";
+            returnMessage += "  Nome: " + champion.getNome();
+        }
+
+        Integer userInput = Integer.parseInt(JOptionPane.showInputDialog(null, returnMessage));
+        if (userInput != 0){
+            weaponMenuUserOption = Integer.parseInt(JOptionPane.showInputDialog(createPrimaryWeaponsMenu() + "Digite o número correspondente à arma desejada:"));
+            while(weaponMenuUserOption == 0){
+                createUserInputedWeapon("primária");
+                weaponMenuUserOption = Integer.parseInt(JOptionPane.showInputDialog(createPrimaryWeaponsMenu() + "Digite o número correspondente à arma desejada:"));
+            }
+
+            Personagem champion = championsList.get(userInput - 1);
+            champion.definirArmaPersonagem(primaryWeaponsList.get(weaponMenuUserOption - 1));
+
+            JOptionPane.showMessageDialog(null, "Arma primária atribuida com sucesso ao personagem " + champion.getNome());
+        }
+    }
+
+    public static void createInventaryMenu(){
+        String returnMessage = "======= Selecione o tipo de arma que você deseja alterar =======\n0. Retornar para o menu\n";
+        returnMessage += "1. Arma primária\n";
+        returnMessage += "2. Arma secundária";
+
+        Integer userInput = Integer.parseInt(JOptionPane.showInputDialog(null, returnMessage));
+        if (userInput != 0){
+            if (userInput == 1){
+                addPrimaryWeapon();
+            }
+            else if (userInput == 2){
+                addSecondaryWeapon();
+            }
+            else if (userInput != 0 | userInput != 1 | userInput != 2){
+                changeWeaponsInventaryUserInvalidOption(userInput);
+            }
+        }
+    }
+
+    public static void changeWeaponsInventaryUserInvalidOption(Integer userInput){
+        JOptionPane.showConfirmDialog(null, "Digite uma opção válida.");
+        createInventaryMenu();
+    }
 }
+
