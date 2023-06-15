@@ -116,15 +116,6 @@ public class Personagem {
     public Integer getPoder() {
         return this.poder;
     }
-    public int getPontosDisponiveis() {
-        return pontosDisponiveis;
-    }
-    public int getXp() {
-        return this.xp;
-    }
-    public int getXpExcedente() {
-        return xpExcedente;
-    }
     
     public Arma getArmaPrimaria() {
         return this.armaPrimaria;
